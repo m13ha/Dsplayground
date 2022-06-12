@@ -10,7 +10,24 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 
 function App() {
-  const [theme, setTheme] = React.useState<PaletteMode>("dark");
+
+
+  const [theme, setTheme] = useState<PaletteMode>(() => {
+    let dsplayground = localStorage.getItem("dsplaygroundThemeMode");
+
+    if (dsplayground) {
+      let localTheme = dsplayground
+
+      if (localTheme === "light") {
+        return("light");
+      } else {
+        return("dark");
+      }
+    }
+
+    localStorage.setItem("dsplaygroundThemeMode", "dark");
+    return ("dark");
+  });
 
   const currentTheme = createTheme({
     palette: {
@@ -21,9 +38,12 @@ function App() {
   const changeTheme = () => {
     if (currentTheme.palette.mode === "light") {
       setTheme("dark");
+      localStorage.setItem("dsplaygroundThemeMode", "dark");
     } else {
       setTheme("light");
+      localStorage.setItem("dsplaygroundThemeMode", "light");
     }
+
   };
 
   const DrawerHeader = styled("div")(({ theme }) => ({
@@ -50,25 +70,15 @@ function App() {
             disableGutters={true}
             color="default"
           >
+            <Navbar changeTheme={changeTheme}></Navbar>
             <Box
-              position="absolute"
-              component="div"
+              component="main"
               color="default"
               sx={{
-                display: "flex",
-              }}
-            >
-              <Navbar changeTheme={changeTheme}></Navbar>
-            </Box>
-            <Box
-              component="div"
-              color="default"
-              sx={{
-                display: "flex",
                 flexWrap: "wrap",
                 height: "100%",
                 overflowY: "scroll",
-                p: 1,
+                p: 3,
               }}
             >
               <DrawerHeader></DrawerHeader>
