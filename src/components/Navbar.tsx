@@ -99,7 +99,13 @@ const Navbar = (props: Props) => {
   }
 
   return (
-    <Box component="span">
+    <Box
+      position="static"
+      component="div"
+      color="default"
+      sx={{
+        display: "flex",
+      }}>
       <AppBar position="fixed" color="default" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
           {!open &&
@@ -126,7 +132,7 @@ const Navbar = (props: Props) => {
                 mr: 2,
                 display: { xs: 'inline-flex', sm: 'inline-flex', md: 'none' }
               }}
-            onClick={handleDrawerClose}>
+              onClick={handleDrawerClose}>
               <CloseIcon fontSize="inherit" />
             </IconButton>
           }
@@ -139,79 +145,105 @@ const Navbar = (props: Props) => {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
+            onClick={props.changeTheme}
           >
             {theme.palette.mode === "dark" && (
-              <LightModeIcon fontSize="inherit" onClick={props.changeTheme} />
+              <LightModeIcon fontSize="inherit" />
             )}
             {theme.palette.mode === "light" && (
-              <DarkModeIcon fontSize="inherit" onClick={props.changeTheme} />
+              <DarkModeIcon fontSize="inherit" />
             )}
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Drawer
+      <Box
         sx={{
           width: 250,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: 250,
-            boxSizing: "border-box",
-          },
+          height: "100%",
           display: { xs: 'block', sm: 'block', md: 'none' },
         }}
-        variant="persistent"
-        anchor="left"
-        open={open}
-        color="primary"
+        position="absolute"
       >
-        <List
+        <Drawer
           sx={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            alignContent: "center",
-            flexWrap: "wrap",
+            flexShrink: 0,
+            "& .MuiDrawer-paper": {
+              width: 250,
+              boxSizing: "border-box",
+            },
+            display: { xs: 'block', sm: 'block', md: 'none' },
           }}
+          variant="persistent"
+          anchor="left"
+          open={open}
+          color="primary"
         >
-          <ListItemLink to="/inbox" primary="Stacks" icon={<FontAwesomeIcon icon={faLayerGroup as IconProp} size="2x" />} />
-          <ListItemLink to="/drafts" primary="Queues" icon={<FontAwesomeIcon icon={faPeopleArrowsLeftRight as IconProp} size="2x" />} />
-          <ListItemLink to="/inbox" primary="Linked List" icon={<FontAwesomeIcon icon={faArrowsLeftRightToLine as IconProp} size="2x" />} />
-          <ListItemLink to="/drafts" primary="Trees" icon={<FontAwesomeIcon icon={faNetworkWired as IconProp} size="2x" />} />
-          <ListItemLink to="/drafts" primary="Graphs" icon={<FontAwesomeIcon icon={faCircleNodes as IconProp} size="2x" />} />
-          <ListItemLink to="/drafts" primary="Hashtables" icon={<FontAwesomeIcon icon={faTableList as IconProp} size="2x" />} />
-        </List>
-      </Drawer>
-      <Drawer
+          <DrawerHeader>
+          </DrawerHeader>
+          <List
+            sx={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              alignContent: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <ListItemLink to="/inbox" primary="Stacks" icon={<FontAwesomeIcon icon={faLayerGroup as IconProp} size="2x" />} />
+            <ListItemLink to="/drafts" primary="Queues" icon={<FontAwesomeIcon icon={faPeopleArrowsLeftRight as IconProp} size="2x" />} />
+            <ListItemLink to="/inbox" primary="Linked List" icon={<FontAwesomeIcon icon={faArrowsLeftRightToLine as IconProp} size="2x" />} />
+            <ListItemLink to="/drafts" primary="Trees" icon={<FontAwesomeIcon icon={faNetworkWired as IconProp} size="2x" />} />
+            <ListItemLink to="/drafts" primary="Graphs" icon={<FontAwesomeIcon icon={faCircleNodes as IconProp} size="2x" />} />
+            <ListItemLink to="/drafts" primary="Hashtables" icon={<FontAwesomeIcon icon={faTableList as IconProp} size="2x" />} />
+          </List>
+        </Drawer>
+      </Box>
+      <Box
         sx={{
-          width: 250,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: 250, boxSizing: 'border-box' },
+          width: {
+            md: 250,
+            xs: 0,
+            sm: 0
+          },
           display: { xs: 'none', sm: 'none', md: 'block' },
         }}
-        variant="permanent"
-        anchor="left"
-        color="primary"
       >
-        <DrawerHeader>
-        </DrawerHeader>
-        <List
+        <Drawer
           sx={{
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            alignContent: "center",
-            flexWrap: "wrap",
+            flexShrink: 0,
+            [`& .MuiDrawer-paper`]: {
+              width: {
+                md: 250,
+                xs: 0,
+                sm: 0
+              }, boxSizing: 'border-box'
+            },
+            display: { xs: 'none', sm: 'none', md: 'block' },
           }}
+          variant="permanent"
+          anchor="left"
+          color="primary"
         >
-          <ListItemLink to="/inbox" primary="Stacks" icon={<FontAwesomeIcon icon={faLayerGroup as IconProp} size="2x" />} />
-          <ListItemLink to="/drafts" primary="Queues" icon={<FontAwesomeIcon icon={faPeopleArrowsLeftRight as IconProp} size="2x" />} />
-          <ListItemLink to="/inbox" primary="Linked List" icon={<FontAwesomeIcon icon={faArrowsLeftRightToLine as IconProp} size="2x" />} />
-          <ListItemLink to="/drafts" primary="Trees" icon={<FontAwesomeIcon icon={faNetworkWired as IconProp} size="2x" />} />
-          <ListItemLink to="/drafts" primary="Graphs" icon={<FontAwesomeIcon icon={faCircleNodes as IconProp} size="2x" />} />
-          <ListItemLink to="/drafts" primary="Hashtables" icon={<FontAwesomeIcon icon={faTableList as IconProp} size="2x" />} />
-        </List>
-      </Drawer>
+          <DrawerHeader>
+          </DrawerHeader>
+          <List
+            sx={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              alignContent: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <ListItemLink to="/inbox" primary="Stacks" icon={<FontAwesomeIcon icon={faLayerGroup as IconProp} size="2x" />} />
+            <ListItemLink to="/drafts" primary="Queues" icon={<FontAwesomeIcon icon={faPeopleArrowsLeftRight as IconProp} size="2x" />} />
+            <ListItemLink to="/inbox" primary="Linked List" icon={<FontAwesomeIcon icon={faArrowsLeftRightToLine as IconProp} size="2x" />} />
+            <ListItemLink to="/drafts" primary="Trees" icon={<FontAwesomeIcon icon={faNetworkWired as IconProp} size="2x" />} />
+            <ListItemLink to="/drafts" primary="Graphs" icon={<FontAwesomeIcon icon={faCircleNodes as IconProp} size="2x" />} />
+            <ListItemLink to="/drafts" primary="Hashtables" icon={<FontAwesomeIcon icon={faTableList as IconProp} size="2x" />} />
+          </List>
+        </Drawer>
+      </Box>
     </Box>
   );
 };
