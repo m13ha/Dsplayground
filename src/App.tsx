@@ -4,10 +4,16 @@ import Navbar from "./components/Navbar";
 import Container from "@mui/material/Container";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { styled } from "@mui/material/styles";
-import React, { useEffect, useState } from "react";
-import { PaletteMode, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { PaletteMode } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
+import LinkedList from "./pages/LinkedList";
+import Stacks from "./pages/Stacks";
+import Queues from "./pages/Queues";
+import Trees from "./pages/Trees";
+import Graphs from "./pages/Graphs";
+import HashTables from "./pages/Hashtables";
 
 function App() {
 
@@ -64,7 +70,6 @@ function App() {
             sx={{
               display: "flex",
               flexWrap: "nowrap",
-              overflowY: "hidden",
             }}
             maxWidth={false}
             disableGutters={true}
@@ -77,16 +82,18 @@ function App() {
               sx={{
                 flexWrap: "wrap",
                 height: "100%",
-                overflowY: "scroll",
                 p: 3,
               }}
             >
               <DrawerHeader></DrawerHeader>
-              <Typography variant="h3" color="initial">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel rem molestiae expedita autem consectetur,
-                voluptatibus corrupti accusamus eveniet earum nesciunt quisquam officia ullam suscipit enim perferendis
-                maiores, eos molestias optio?
-              </Typography>
+              <Routes>
+                <Route path="/" element={<Stacks />} />
+                <Route path="/queues" element={<Queues />} />
+                <Route path="/linkedlists" element={<LinkedList />} />
+                <Route path="/trees" element={<Trees />} />
+                <Route path="/graphs" element={<Graphs />} />
+                <Route path="/hashtables" element={<HashTables />} />
+              </Routes>
             </Box>
           </Container>
         </div>

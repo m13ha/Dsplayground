@@ -189,12 +189,12 @@ const Navbar = (props: Props) => {
               flexWrap: "wrap",
             }}
           >
-            <ListItemLink to="/inbox" primary="Stacks" icon={<FontAwesomeIcon icon={faLayerGroup as IconProp} size="2x" />} />
-            <ListItemLink to="/drafts" primary="Queues" icon={<FontAwesomeIcon icon={faPeopleArrowsLeftRight as IconProp} size="2x" />} />
-            <ListItemLink to="/inbox" primary="Linked List" icon={<FontAwesomeIcon icon={faArrowsLeftRightToLine as IconProp} size="2x" />} />
-            <ListItemLink to="/drafts" primary="Trees" icon={<FontAwesomeIcon icon={faNetworkWired as IconProp} size="2x" />} />
-            <ListItemLink to="/drafts" primary="Graphs" icon={<FontAwesomeIcon icon={faCircleNodes as IconProp} size="2x" />} />
-            <ListItemLink to="/drafts" primary="Hashtables" icon={<FontAwesomeIcon icon={faTableList as IconProp} size="2x" />} />
+            <ListItemLink to="/stacks" primary="Stacks" icon={<FontAwesomeIcon icon={faLayerGroup as IconProp} size="2x" />} />
+            <ListItemLink to="/queues" primary="Queues" icon={<FontAwesomeIcon icon={faPeopleArrowsLeftRight as IconProp} size="2x" />} />
+            <ListItemLink to="/linkedlists" primary="Linked List" icon={<FontAwesomeIcon icon={faArrowsLeftRightToLine as IconProp} size="2x" />} />
+            <ListItemLink to="/trees" primary="Trees" icon={<FontAwesomeIcon icon={faNetworkWired as IconProp} size="2x" />} />
+            <ListItemLink to="/graphs" primary="Graphs" icon={<FontAwesomeIcon icon={faCircleNodes as IconProp} size="2x" />} />
+            <ListItemLink to="/Hashtables" primary="Hashtables" icon={<FontAwesomeIcon icon={faTableList as IconProp} size="2x" />} />
           </List>
         </Drawer>
       </Box>
@@ -235,12 +235,12 @@ const Navbar = (props: Props) => {
               flexWrap: "wrap",
             }}
           >
-            <ListItemLink to="/inbox" primary="Stacks" icon={<FontAwesomeIcon icon={faLayerGroup as IconProp} size="2x" />} />
-            <ListItemLink to="/drafts" primary="Queues" icon={<FontAwesomeIcon icon={faPeopleArrowsLeftRight as IconProp} size="2x" />} />
-            <ListItemLink to="/inbox" primary="Linked List" icon={<FontAwesomeIcon icon={faArrowsLeftRightToLine as IconProp} size="2x" />} />
-            <ListItemLink to="/drafts" primary="Trees" icon={<FontAwesomeIcon icon={faNetworkWired as IconProp} size="2x" />} />
-            <ListItemLink to="/drafts" primary="Graphs" icon={<FontAwesomeIcon icon={faCircleNodes as IconProp} size="2x" />} />
-            <ListItemLink to="/drafts" primary="Hashtables" icon={<FontAwesomeIcon icon={faTableList as IconProp} size="2x" />} />
+            <ListItemLink to="/" primary="Stacks" icon={<FontAwesomeIcon icon={faLayerGroup as IconProp} size="2x" />} />
+            <ListItemLink to="/queues" primary="Queues" icon={<FontAwesomeIcon icon={faPeopleArrowsLeftRight as IconProp} size="2x" />} />
+            <ListItemLink to="/linkedlists" primary="Linked List" icon={<FontAwesomeIcon icon={faArrowsLeftRightToLine as IconProp} size="2x" />} />
+            <ListItemLink to="/trees" primary="Trees" icon={<FontAwesomeIcon icon={faNetworkWired as IconProp} size="2x" />} />
+            <ListItemLink to="/graphs" primary="Graphs" icon={<FontAwesomeIcon icon={faCircleNodes as IconProp} size="2x" />} />
+            <ListItemLink to="/Hashtables" primary="Hashtables" icon={<FontAwesomeIcon icon={faTableList as IconProp} size="2x" />} />
           </List>
         </Drawer>
       </Box>
