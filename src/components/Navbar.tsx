@@ -77,7 +77,8 @@ const Navbar = (props: Props) => {
       <ListItem
         sx={{
           width: 250,
-          height: 100,
+          height:  window.innerHeight / 7,
+          minHeight: 70,
           display: "flex",
           alignItems: "center",
           alignContent: "center",
@@ -183,6 +184,7 @@ const Navbar = (props: Props) => {
           <List
             sx={{
               width: "100%",
+              height: "100%",
               display: "flex",
               alignItems: "center",
               alignContent: "center",
@@ -229,9 +231,10 @@ const Navbar = (props: Props) => {
           <List
             sx={{
               width: "100%",
+              height: "100%",
               display: "flex",
               alignItems: "center",
-              alignContent: "center",
+              alignContent: "flex-start",
               flexWrap: "wrap",
             }}
           >

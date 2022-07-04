@@ -1,7 +1,6 @@
 //import React from 'react';
 import Box from "@mui/material/Box";
-import Typography from '@mui/material/Typography'
-
+import Typography from '@mui/material/Typography';
 
 interface Props {
 }
@@ -9,8 +8,11 @@ interface Props {
 const HashTables = (props: Props) => {
     return (
         <Box>
-            <Typography variant="h5" color="initial">
+            <Typography variant="h4" color="primary" mb={2}>
                 Hashtables
+            </Typography>
+            <Typography component="p" variant="body1" color="initial">
+                Coming Soon...
             </Typography>
         </Box>
     );

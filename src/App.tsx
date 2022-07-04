@@ -70,6 +70,7 @@ function App() {
             sx={{
               display: "flex",
               flexWrap: "nowrap",
+              height: "100%"
             }}
             maxWidth={false}
             disableGutters={true}
