@@ -106,8 +106,9 @@ const Navbar = (props: Props) => {
       color="default"
       sx={{
         display: "flex",
-      }}>
-      <AppBar position="fixed" color="default" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+      }}
+      >
+      <AppBar position="fixed" color="default" sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }}>
         <Toolbar>
           {!open &&
             <IconButton
@@ -187,11 +188,11 @@ const Navbar = (props: Props) => {
               height: "100%",
               display: "flex",
               alignItems: "center",
-              alignContent: "center",
+              alignContent: "flex-start",
               flexWrap: "wrap",
             }}
           >
-            <ListItemLink to="/stacks" primary="Stacks" icon={<FontAwesomeIcon icon={faLayerGroup as IconProp} size="2x" />} />
+            <ListItemLink to="/" primary="Stacks" icon={<FontAwesomeIcon icon={faLayerGroup as IconProp} size="2x" />} />
             <ListItemLink to="/queues" primary="Queues" icon={<FontAwesomeIcon icon={faPeopleArrowsLeftRight as IconProp} size="2x" />} />
             <ListItemLink to="/linkedlists" primary="Linked List" icon={<FontAwesomeIcon icon={faArrowsLeftRightToLine as IconProp} size="2x" />} />
             <ListItemLink to="/trees" primary="Trees" icon={<FontAwesomeIcon icon={faNetworkWired as IconProp} size="2x" />} />
