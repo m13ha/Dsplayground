@@ -14,7 +14,7 @@ const StacksCompiler = () => {
     useEffect(() => {
         let newStacksArray = stacksArray;
         newStacksArray.forEach((object: StackType) => {
-            object.posX  = canvasWidth / 3;
+            object.posX = canvasWidth / 3;
             object.width = canvasWidth / 3;
         });
         setStacksArray(newStacksArray)
@@ -58,6 +58,12 @@ const StacksCompiler = () => {
         }
     }
 
+    const removeHeadOfStack = () => {
+        let newArray = [...stacksArray];
+        newArray.pop();
+        setStacksArray(newArray);
+    }
+
     return (
         <React.Fragment>
             <Kanvas></Kanvas>
@@ -71,11 +77,12 @@ const StacksCompiler = () => {
                     justifyContent: "center",
                     justifyItems: "center"
                 }}>
-                < ButtonGroup variant="contained" aria-label="outlined primary button group" >
-                    {(!isNaN(canvasWidth)) &&
-                        <Button onClick={createNewStackObject}>Push to Stack</Button>
-                    }
-                </ButtonGroup >
+                {(!isNaN(canvasWidth)) &&
+                    < ButtonGroup variant="contained" aria-label="outlined primary button group" >
+                        <Button onClick={createNewStackObject}>Push</Button>
+                        <Button onClick={removeHeadOfStack}>Pop</Button>
+                    </ButtonGroup >
+                }
             </Box>
         </React.Fragment>
     )
