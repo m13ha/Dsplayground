@@ -1,15 +1,17 @@
 import React, { useState, useContext, useEffect } from "react";
-import { CanvasContext } from "../context/CanvasContext";
+import { CanvasContext } from "../../context/CanvasContext";
 import Button from '@mui/material/Button';
-import ButtonGroup from '@mui/material/ButtonGroup';
+import Stack from '@mui/material/Stack';
 import Box from "@mui/material/Box";
-import Kanvas from "./Kanvas";
-import { StackType } from "../utils/interfaces";
+import Kanvas from "../Stacks/Kanvas";
+import { StackType } from "../../utils/interfaces";
+import { setTimeout } from "timers";
 
 
 const StacksCompiler = () => {
     const [scale, setScale] = useState<number>(1)
     const { canvasHeight, canvasWidth, stacksArray, setStacksArray } = useContext(CanvasContext);
+    const [buttonActive, setButtonActive]  = useState(false)
 
     useEffect(() => {
         let newStacksArray = stacksArray;
@@ -42,26 +44,37 @@ const StacksCompiler = () => {
             let height = 30 * scale;
             let width = canvasWidth / 3;
             let newStackNode = new StackNode(posX, posY, height, width);
-            let newArray = [...stacksArray]
-            newArray.push(newStackNode);
-            setStacksArray(newArray);
+            return newStackNode
         } else {
             let posY = canvasHeight - 35;
             let posX = canvasWidth / 3;
             let height = 30 * scale;
             let width = canvasWidth / 3;
             let newStackNode = new StackNode(posX, posY, height, width);
-            let newArray = [...stacksArray];
-            newArray.push(newStackNode);
-            setStacksArray(newArray);
-
+            return newStackNode
         }
     }
 
-    const removeHeadOfStack = () => {
+    
+    const pushNewHeadToStack = () => {
+        setButtonActive(true);
+        let newStackNode = createNewStackObject();
+        let newArray = [...stacksArray];
+        newArray.push(newStackNode);
+        setStacksArray(newArray);
+    }
+
+    const popHeadOfStack = () => {
+        setButtonActive(true);
         let newArray = [...stacksArray];
         newArray.pop();
         setStacksArray(newArray);
+    }
+    
+    const resetButton = () => {
+        setTimeout(() => {
+            setButtonActive(false)
+        }, 1000);
     }
 
     return (
@@ -70,7 +83,6 @@ const StacksCompiler = () => {
             <Box mt={4}
                 sx={{
                     width: "100%",
-                    height: 70,
                     display: "flex",
                     alignItems: "center",
                     alignContent: "center",
@@ -78,10 +90,10 @@ const StacksCompiler = () => {
                     justifyItems: "center"
                 }}>
                 {(!isNaN(canvasWidth)) &&
-                    < ButtonGroup variant="contained" aria-label="outlined primary button group" >
-                        <Button onClick={createNewStackObject}>Push</Button>
-                        <Button onClick={removeHeadOfStack}>Pop</Button>
-                    </ButtonGroup >
+                    <Stack direction="row" spacing={2}>
+                        <Button variant="contained" color="success" disabled={buttonActive} onClick={pushNewHeadToStack}>Push</Button>
+                        <Button variant="contained" color="error" disabled={buttonActive} onClick={popHeadOfStack}>Pop</Button>
+                    </Stack>
                 }
             </Box>
         </React.Fragment>

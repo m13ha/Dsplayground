@@ -8,12 +8,12 @@ import React, { useState, useMemo } from "react";
 import { PaletteMode } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import LinkedList from "./pages/LinkedList";
-import Stacks from "./pages/Stacks";
-import Queues from "./pages/Queues";
-import Trees from "./pages/Trees";
-import Graphs from "./pages/Graphs";
-import HashTables from "./pages/Hashtables";
+import LinkedList from "./pages/LinkedLists/LinkedList";
+import Stacks from "./pages/Stacks/Stacks";
+import Queues from "./pages/Queues/Queues";
+import Trees from "./pages/Trees/Trees";
+import Graphs from "./pages/Graphs/Graphs";
+import HashTables from "./pages/Hashtable/Hashtables";
 import { CanvasContext } from "./context/CanvasContext";
 import { StacksArray } from "./utils/interfaces";
 

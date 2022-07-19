@@ -1,12 +1,11 @@
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import React, { useEffect, useState, useContext, useRef } from "react";
-import { CanvasContext } from "../context/CanvasContext";
+import { CanvasContext } from "../../context/CanvasContext";
 import { Stage, Layer, Rect } from 'react-konva';
-import "../components/kanvas.css"
-import { StacksArray, StackType } from "../utils/interfaces";
+import { StacksArray, StackType } from "../../utils/interfaces";
 import Konva from "konva";
-import { arrayBuffer } from "node:stream/consumers";
+
 
 
 
@@ -69,13 +68,21 @@ const Kanvas = () => {
         if (stackArrayCount < localStacksArray.length) {
             rect?.to({
                 x: canvasWidth + 200,
+                // onFinish: (() => {
+                //     setTimeout(() => {
+                //         array = array.slice(0, stackArrayCount);
+                //         setHeadStack(array);
+                //         setLocalStacksArray(newArray);
+                //         setPopState(false)
+                //     }, 100);
+                // })
             })
             setTimeout(() => {
                 array = array.slice(0, stackArrayCount);
                 setHeadStack(array);
                 setLocalStacksArray(newArray);
                 setPopState(false)
-            }, 300);
+            }, 500);
         }
         //console.log(localStacksArray)
     }, [popState])
@@ -132,7 +139,7 @@ const Kanvas = () => {
                                     height={object.height}
                                     width={object.width}
                                     stroke="black"
-                                    strokeWidth={3}
+                                    strokeWidth={2}
                                     key={index}
                                     ref={rectRef}
                                 />
