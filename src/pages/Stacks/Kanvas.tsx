@@ -34,10 +34,6 @@ const Kanvas = () => {
     }, [rectRef.current, popState])
 
     useEffect(() => {
-        console.log(headStack)
-    }, [headStack, popState])
-
-    useEffect(() => {
         if (theme.palette.mode === "dark") {
             setCanvasTheme("cv-white")
         } else {
@@ -146,7 +142,6 @@ const Kanvas = () => {
     }
 
     const headTagHandler = () => {
-        console.log(textRef)
         if (localStacksArray.length > 0 && !isNaN(canvasWidth)) {
             let rect = localStacksArray[localStacksArray.length - 1]
             let text = textRef.current;
