@@ -48,15 +48,16 @@ const Kanvas = () => {
     useEffect(() => {
         let newStackArray = stacksArray;
         if (stacksArray.length > stackArrayCount) {
-                setLocalStacksArray(newStackArray);
-                setPushState(true);
+            setLocalStacksArray(newStackArray);
+            animateView();
+            setPushState(true);
         }
     }, [stacksArray])
 
     useEffect(() => {
         if (stacksArray.length < stackArrayCount) {
-                setStackArrayCount(prevState => (prevState - 1));
-                setPopState(true);
+            setStackArrayCount(prevState => (prevState - 1));
+            setPopState(true);
         }
     }, [stacksArray])
 
@@ -82,7 +83,6 @@ const Kanvas = () => {
 
     useEffect(() => {
         let rect = rectRef.current;
-        animateView();
         headTagHandler();
         if (localStacksArray.length > stackArrayCount) {
             rect?.to({
@@ -119,7 +119,7 @@ const Kanvas = () => {
         let newLocalStackArray = localStacksArray;
         let newStackArray = stacksArray;
         let newHeadStack = headStack;
-        if (stacksArray.length > 1 && stacksArray[stacksArray.length - 1].posY < 0) {
+        if (stacksArray.length > 1 && stacksArray[stacksArray.length - 1].posY < 45) {
             newHeadStack.forEach((rect: any) => {
                 rect?.to({
                     y: rect.attrs.y + 220,
@@ -131,7 +131,7 @@ const Kanvas = () => {
             setHeadStack(newHeadStack);
             setStacksArray(newStackArray);
 
-        }else if (localStacksArray.length > 1 && localStacksArray[localStacksArray.length - 1].posY > 409) {
+        } else if (localStacksArray.length > 1 && localStacksArray[localStacksArray.length - 1].posY > 409) {
             newHeadStack.forEach((rect: any) => {
                 rect?.to({
                     y: rect.attrs.y - 220,
@@ -144,10 +144,10 @@ const Kanvas = () => {
             setLocalStacksArray(newStackArray);
         }
     }
-    
+
     const headTagHandler = () => {
         console.log(textRef)
-        if (localStacksArray.length > 0 && !isNaN(canvasWidth)){
+        if (localStacksArray.length > 0 && !isNaN(canvasWidth)) {
             let rect = localStacksArray[localStacksArray.length - 1]
             let text = textRef.current;
             text?.to({
@@ -176,14 +176,14 @@ const Kanvas = () => {
             <div className={`canvas-container ${canvasTheme}`} ref={canvasRef}>
                 <Stage width={canvasRef.current?.clientWidth} height={canvasRef.current?.clientHeight}>
                     {(localStacksArray.length > 0) && <Layer>
-                        <Text 
+                        <Text
                             x={headTagPosX}
                             y={headTagPosY}
                             text={"Head/Top"}
                             fontSize={15}
                             fontStyle="bold"
                             ref={textRef}
-                            />
+                        />
                         {localStacksArray.map((object: StackType, index: number) => {
                             return (
                                 <Rect
