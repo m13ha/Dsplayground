@@ -79,7 +79,7 @@ const StacksCompiler = () => {
     const resetButton = () => {
         setTimeout(() => {
             setButtonActive(false)
-        }, 1000);
+        }, 100);
     }
 
     return (

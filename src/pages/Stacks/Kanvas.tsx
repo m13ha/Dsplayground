@@ -96,12 +96,11 @@ const Kanvas = () => {
 
     useEffect(() => {
         updateCanvasDimension()
-        headTagHandler();
     }, [])
 
     useEffect(() => {
         headTagHandler();
-    }, [canvasWidth])
+    }, [canvasWidth, canvasHeight])
 
     useEffect(() => {
         window.addEventListener("resize", updateCanvasDimension)
@@ -147,17 +146,18 @@ const Kanvas = () => {
     }
     
     const headTagHandler = () => {
+        console.log(textRef)
         if (localStacksArray.length > 0 && !isNaN(canvasWidth)){
             let rect = localStacksArray[localStacksArray.length - 1]
             let text = textRef.current;
             text?.to({
-                x: (rect.posX + (rect.width + 40)),
+                x: (rect.posX + rect.width + 5),
                 y: (rect.posY + (rect.height / 3))
             })
         } else {
-            setHeadTagPosX((canvasWidth / 3));
-            setHeadTagPosY(450 / 2)
             setHeadTagText("Stack is empty");
+            setHeadTagPosX((canvasWidth / 2) - (140 / 2));
+            setHeadTagPosY(450 / 2)
         }
     }
 
@@ -206,6 +206,7 @@ const Kanvas = () => {
                             text={headTagText}
                             fontSize={20}
                             fontStyle="bold"
+                            ref={textRef}
                         />
                     </Layer>}
                 </Stage>
