@@ -100,6 +100,10 @@ const Kanvas = () => {
     }, [])
 
     useEffect(() => {
+        headTagHandler();
+    }, [canvasWidth])
+
+    useEffect(() => {
         window.addEventListener("resize", updateCanvasDimension)
     })
 
@@ -151,7 +155,7 @@ const Kanvas = () => {
                 y: (rect.posY + (rect.height / 3))
             })
         } else {
-            setHeadTagPosX((canvasWidth / 3) + 15);
+            setHeadTagPosX((canvasWidth / 3));
             setHeadTagPosY(450 / 2)
             setHeadTagText("Stack is empty");
         }
