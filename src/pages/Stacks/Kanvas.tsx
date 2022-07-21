@@ -2,7 +2,7 @@ import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import React, { useEffect, useState, useContext, useRef } from "react";
 import { CanvasContext } from "../../context/CanvasContext";
-import { Stage, Layer, Rect } from 'react-konva';
+import { Stage, Layer, Rect, Text } from 'react-konva';
 import { StacksArray, StackType } from "../../utils/interfaces";
 import Konva from "konva";
 
@@ -12,15 +12,18 @@ import Konva from "konva";
 const Kanvas = () => {
     const theme = useTheme();
     const canvasRef = useRef<HTMLDivElement>(null);
-    const { canvasWidth, setCanvasHeight, setCanvasWidth, stacksArray } = useContext(CanvasContext);
+    const { canvasWidth, canvasHeight, setCanvasHeight, setCanvasWidth, stacksArray, setStacksArray } = useContext(CanvasContext);
     const [stackArrayCount, setStackArrayCount] = useState<number>(0);
     const [localStacksArray, setLocalStacksArray] = useState<StacksArray>([])
     const [pushState, setPushState] = useState<Boolean>(false);
     const [popState, setPopState] = useState<Boolean>(false);
     const [headStack, setHeadStack] = useState<any>([])
-
+    const [headTagPosX, setHeadTagPosX] = useState<number>(0)
+    const [headTagPosY, setHeadTagPosY] = useState<number>(0)
+    const [headTagText, setHeadTagText] = useState<string>()
     const [canvasTheme, setCanvasTheme] = useState("cv-white");
     const rectRef = React.useRef<Konva.Rect>(null);
+    const textRef = React.useRef<Konva.Text>(null)
 
     useEffect(() => {
         if (rectRef.current !== null) {
@@ -43,20 +46,18 @@ const Kanvas = () => {
     }, [theme])
 
     useEffect(() => {
+        let newStackArray = stacksArray;
         if (stacksArray.length > stackArrayCount) {
-            let newArray = stacksArray;
-            setLocalStacksArray(newArray);
-            setPushState(true);
+                setLocalStacksArray(newStackArray);
+                setPushState(true);
         }
-        //console.log(stacksArray)
     }, [stacksArray])
 
     useEffect(() => {
         if (stacksArray.length < stackArrayCount) {
-            setStackArrayCount(prevState => (prevState - 1));
-            setPopState(true);
+                setStackArrayCount(prevState => (prevState - 1));
+                setPopState(true);
         }
-        //console.log(stacksArray)
     }, [stacksArray])
 
 
@@ -64,18 +65,11 @@ const Kanvas = () => {
         let array = headStack;
         let newArray = stacksArray;
         let rect = array[stackArrayCount];
-        //console.log(headStack);
+        animateView();
+        headTagHandler();
         if (stackArrayCount < localStacksArray.length) {
             rect?.to({
                 x: canvasWidth + 200,
-                // onFinish: (() => {
-                //     setTimeout(() => {
-                //         array = array.slice(0, stackArrayCount);
-                //         setHeadStack(array);
-                //         setLocalStacksArray(newArray);
-                //         setPopState(false)
-                //     }, 100);
-                // })
             })
             setTimeout(() => {
                 array = array.slice(0, stackArrayCount);
@@ -84,11 +78,12 @@ const Kanvas = () => {
                 setPopState(false)
             }, 500);
         }
-        //console.log(localStacksArray)
     }, [popState])
 
     useEffect(() => {
         let rect = rectRef.current;
+        animateView();
+        headTagHandler();
         if (localStacksArray.length > stackArrayCount) {
             rect?.to({
                 x: canvasWidth / 3,
@@ -96,11 +91,12 @@ const Kanvas = () => {
             setStackArrayCount(prevState => (prevState + 1));
             setPushState(false)
         }
-        //console.log(localStacksArray)
     }, [pushState])
+
 
     useEffect(() => {
         updateCanvasDimension()
+        headTagHandler();
     }, [])
 
     useEffect(() => {
@@ -113,6 +109,51 @@ const Kanvas = () => {
             setCanvasWidth(newWidth);
             const newHeight = canvasRef.current.clientHeight;
             setCanvasHeight(newHeight);
+        }
+    }
+
+    const animateView = () => {
+        let newLocalStackArray = localStacksArray;
+        let newStackArray = stacksArray;
+        let newHeadStack = headStack;
+        if (stacksArray.length > 1 && stacksArray[stacksArray.length - 1].posY < 0) {
+            newHeadStack.forEach((rect: any) => {
+                rect?.to({
+                    y: rect.attrs.y + 220,
+                })
+            });
+            newStackArray.forEach((rect: StackType) => {
+                rect.posY = rect.posY + 220;
+            });
+            setHeadStack(newHeadStack);
+            setStacksArray(newStackArray);
+
+        }else if (localStacksArray.length > 1 && localStacksArray[localStacksArray.length - 1].posY > 409) {
+            newHeadStack.forEach((rect: any) => {
+                rect?.to({
+                    y: rect.attrs.y - 220,
+                })
+            });
+            newLocalStackArray.forEach((rect: StackType) => {
+                rect.posY = rect.posY - 220;
+            });
+            setHeadStack(newHeadStack);
+            setLocalStacksArray(newStackArray);
+        }
+    }
+    
+    const headTagHandler = () => {
+        if (localStacksArray.length > 0 && !isNaN(canvasWidth)){
+            let rect = localStacksArray[localStacksArray.length - 1]
+            let text = textRef.current;
+            text?.to({
+                x: (rect.posX + (rect.width + 40)),
+                y: (rect.posY + (rect.height / 3))
+            })
+        } else {
+            setHeadTagPosX((500 / 3) + 15);
+            setHeadTagPosY(450 / 2)
+            setHeadTagText("Stack is empty");
         }
     }
 
@@ -131,6 +172,14 @@ const Kanvas = () => {
             <div className={`canvas-container ${canvasTheme}`} ref={canvasRef}>
                 <Stage width={canvasRef.current?.clientWidth} height={canvasRef.current?.clientHeight}>
                     {(localStacksArray.length > 0) && <Layer>
+                        <Text 
+                            x={headTagPosX}
+                            y={headTagPosY}
+                            text={"Head/Top"}
+                            fontSize={15}
+                            fontStyle="bold"
+                            ref={textRef}
+                            />
                         {localStacksArray.map((object: StackType, index: number) => {
                             return (
                                 <Rect
@@ -145,6 +194,15 @@ const Kanvas = () => {
                                 />
                             )
                         })}
+                    </Layer>}
+                    {(localStacksArray.length === 0) && (!isNaN(canvasWidth)) && <Layer>
+                        <Text
+                            x={headTagPosX}
+                            y={headTagPosY}
+                            text={headTagText}
+                            fontSize={20}
+                            fontStyle="bold"
+                        />
                     </Layer>}
                 </Stage>
             </div>

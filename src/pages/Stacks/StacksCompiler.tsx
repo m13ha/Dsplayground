@@ -5,13 +5,12 @@ import Stack from '@mui/material/Stack';
 import Box from "@mui/material/Box";
 import Kanvas from "../Stacks/Kanvas";
 import { StackType } from "../../utils/interfaces";
-import { setTimeout } from "timers";
 
 
 const StacksCompiler = () => {
     const [scale, setScale] = useState<number>(1)
     const { canvasHeight, canvasWidth, stacksArray, setStacksArray } = useContext(CanvasContext);
-    const [buttonActive, setButtonActive]  = useState(false)
+    const [buttonActive, setButtonActive] = useState(false)
 
     useEffect(() => {
         let newStacksArray = stacksArray;
@@ -55,22 +54,28 @@ const StacksCompiler = () => {
         }
     }
 
-    
+
     const pushNewHeadToStack = () => {
-        setButtonActive(true);
-        let newStackNode = createNewStackObject();
-        let newArray = [...stacksArray];
-        newArray.push(newStackNode);
-        setStacksArray(newArray);
+        if (!buttonActive) {
+            setButtonActive(true);
+            let newStackNode = createNewStackObject();
+            let newArray = [...stacksArray];
+            newArray.push(newStackNode);
+            setStacksArray(newArray);
+            resetButton()
+        }
     }
 
     const popHeadOfStack = () => {
-        setButtonActive(true);
-        let newArray = [...stacksArray];
-        newArray.pop();
-        setStacksArray(newArray);
+        if (!buttonActive && stacksArray.length > 0) {
+            setButtonActive(true);
+            let newArray = [...stacksArray];
+            newArray.pop();
+            setStacksArray(newArray);
+            resetButton()
+        }
     }
-    
+
     const resetButton = () => {
         setTimeout(() => {
             setButtonActive(false)
@@ -80,7 +85,7 @@ const StacksCompiler = () => {
     return (
         <React.Fragment>
             <Kanvas></Kanvas>
-            <Box mt={4}
+            <Box mt={5}
                 sx={{
                     width: "100%",
                     display: "flex",
@@ -91,8 +96,8 @@ const StacksCompiler = () => {
                 }}>
                 {(!isNaN(canvasWidth)) &&
                     <Stack direction="row" spacing={2}>
-                        <Button variant="contained" color="success" disabled={buttonActive} onClick={pushNewHeadToStack}>Push</Button>
-                        <Button variant="contained" color="error" disabled={buttonActive} onClick={popHeadOfStack}>Pop</Button>
+                        <Button variant="contained" color="success" onClick={pushNewHeadToStack}>Push</Button>
+                        <Button variant="contained" color="error" onClick={popHeadOfStack}>Pop</Button>
                     </Stack>
                 }
             </Box>
