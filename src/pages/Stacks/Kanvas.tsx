@@ -151,7 +151,7 @@ const Kanvas = () => {
                 y: (rect.posY + (rect.height / 3))
             })
         } else {
-            setHeadTagPosX((500 / 3) + 15);
+            setHeadTagPosX((canvasWidth / 3) + 15);
             setHeadTagPosY(450 / 2)
             setHeadTagText("Stack is empty");
         }

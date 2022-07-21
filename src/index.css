@@ -30,14 +30,9 @@ code {
 }
 
 
-/* canvas {
-  width: 100% !important;
-  height: 400px !important;
-} */
-
 .canvas-container {
-  width: 500px;
-  /* //max-width: 750px; */
+  max-width: 500px;
+  width: 100%;
   height: 450px;
 }
 
