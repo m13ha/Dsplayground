@@ -8,7 +8,6 @@ import { StackType } from "../../utils/interfaces";
 
 
 const StacksCompiler = () => {
-    const [scale, setScale] = useState<number>(1)
     const { canvasHeight, canvasWidth, stacksArray, setStacksArray } = useContext(CanvasContext);
     const [buttonActive, setButtonActive] = useState(false)
 
@@ -40,14 +39,14 @@ const StacksCompiler = () => {
             let currentHead = stacksArray[stacksArray.length - 1]
             let posY = currentHead.posY - 35;
             let posX = currentHead.posX;
-            let height = 30 * scale;
+            let height = 30;
             let width = canvasWidth / 3;
             let newStackNode = new StackNode(posX, posY, height, width);
             return newStackNode
         } else {
             let posY = canvasHeight - 35;
             let posX = canvasWidth / 3;
-            let height = 30 * scale;
+            let height = 30;
             let width = canvasWidth / 3;
             let newStackNode = new StackNode(posX, posY, height, width);
             return newStackNode
