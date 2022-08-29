@@ -22,8 +22,9 @@ const Kanvas = () => {
     const [headTagPosY, setHeadTagPosY] = useState<number>(0)
     const [headTagText, setHeadTagText] = useState<string>()
     const [canvasTheme, setCanvasTheme] = useState("cv-white");
+    const [rectColor, setRectColor]  = useState("black")
     const rectRef = React.useRef<Konva.Rect>(null);
-    const textRef = React.useRef<Konva.Text>(null)
+    const textRef = React.useRef<Konva.Text>(null);
 
 
     useEffect(() => {
@@ -51,8 +52,10 @@ const Kanvas = () => {
     useEffect(() => {
         if (theme.palette.mode === "dark") {
             setCanvasTheme("cv-white")
+            setRectColor("white")
         } else {
             setCanvasTheme("cv-black")
+            setRectColor("black")
         }
     }, [theme])
 
@@ -64,7 +67,7 @@ const Kanvas = () => {
             setLocalStacksArray(newStackArray);
             animateView();
             setPushState(true);
-        }else{
+        } else {
             setStackArrayCount(prevState => (prevState - 1));
             setPopState(true);
         }
@@ -74,24 +77,24 @@ const Kanvas = () => {
 
     // animate a rect being popped from the stack
     useEffect(() => {
-        let array = headStack;
+        let newHeadStack = headStack
         let newArray = stacksArray;
-        let rect = array.pop();
+        let rect = newHeadStack.pop();
+        headTagHandler();
         animateView();
         if (stackArrayCount < localStacksArray.length) {
             rect?.to({
                 x: canvasWidth + 200,
             })
-            headTagHandler();
             setTimeout(() => {
-                setHeadStack(array);
-                setLocalStacksArray(newArray);
-                setPopState(false)
-            }, 700);
+                setHeadStack(newHeadStack);
+                setLocalStacksArray(newArray)
+                setPopState(false);
+            }, 500);
         }
     }, [popState])
 
-     // animate a rect being pushed to the stack
+    // animate a rect being pushed to the stack
     useEffect(() => {
         let rect = rectRef.current;
         let array = [...headStack];
@@ -106,6 +109,18 @@ const Kanvas = () => {
             setPushState(false)
         }
     }, [pushState])
+
+
+    useEffect(() => {
+        if (localStacksArray.length > 0 && !isNaN(canvasWidth)) {
+            let rect = localStacksArray[localStacksArray.length - 1]
+            let text = textRef.current;
+            text?.to({
+                x: (rect.posX + rect.width + 5),
+                y: (rect.posY + (rect.height / 3))
+            })
+        } 
+    }, [textRef.current, headStack])
 
 
     // CAMERA POSITION ANIMATOR, MOVE CAMERA UP OR DOWN DENPENDING ON POSITION OF CURRENT HEAD.
@@ -137,6 +152,7 @@ const Kanvas = () => {
             setHeadStack(newHeadStack);
             setLocalStacksArray(newStackArray);
         }
+        headTagHandler();
     }
 
     // ANIMATE POSITION OF HEAD TEXT 
@@ -176,6 +192,7 @@ const Kanvas = () => {
                             text={"Head/Top"}
                             fontSize={15}
                             fontStyle="bold"
+                            fill={rectColor}
                             ref={textRef}
                         />
                         {localStacksArray.map((object: StackType, index: number) => {
@@ -185,7 +202,7 @@ const Kanvas = () => {
                                     y={object.posY}
                                     height={object.height}
                                     width={object.width}
-                                    stroke="black"
+                                    stroke={rectColor}
                                     strokeWidth={2}
                                     key={index}
                                     ref={rectRef}
@@ -200,6 +217,7 @@ const Kanvas = () => {
                             text={headTagText}
                             fontSize={20}
                             fontStyle="bold"
+                            fill={rectColor}
                             ref={textRef}
                         />
                     </Layer>}

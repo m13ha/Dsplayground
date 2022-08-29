@@ -5,10 +5,7 @@ import Link from '@mui/material/Link';
 import StacksCompiler from "../Stacks/StacksCompiler"
 
 
-interface Props {
-}
-
-const Stacks = (props: Props) => {
+const Stacks = () => {
 
   return (
     <Box>

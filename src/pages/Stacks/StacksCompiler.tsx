@@ -78,7 +78,7 @@ const StacksCompiler = () => {
     const resetButton = () => {
         setTimeout(() => {
             setButtonActive(false)
-        }, 100);
+        }, 700);
     }
 
     return (

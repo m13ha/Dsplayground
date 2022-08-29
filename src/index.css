@@ -37,11 +37,9 @@ code {
 }
 
 .cv-white {
-  background-color: #90caf9;
-  border: 3px solid #fff !important;
+  background-color: transparent;
 }
 
 .cv-black {
-  background-color: #90caf9;
-  border: 3px solid #000 !important;
+  background-color: transparent;
 }
