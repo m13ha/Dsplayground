@@ -25,70 +25,6 @@ const Kanvas = () => {
     const rectRef = React.useRef<Konva.Rect>(null);
     const textRef = React.useRef<Konva.Text>(null)
 
-    useEffect(() => {
-        if (rectRef.current !== null) {
-            let array = [...headStack];
-            array.push(rectRef.current);
-            setHeadStack(array)
-        }
-    }, [rectRef.current, popState])
-
-    useEffect(() => {
-        if (theme.palette.mode === "dark") {
-            setCanvasTheme("cv-white")
-        } else {
-            setCanvasTheme("cv-black")
-        }
-    }, [theme])
-
-    useEffect(() => {
-        let newStackArray = stacksArray;
-        if (stacksArray.length > stackArrayCount) {
-            setLocalStacksArray(newStackArray);
-            animateView();
-            setPushState(true);
-        }
-    }, [stacksArray])
-
-    useEffect(() => {
-        if (stacksArray.length < stackArrayCount) {
-            setStackArrayCount(prevState => (prevState - 1));
-            setPopState(true);
-        }
-    }, [stacksArray])
-
-
-    useEffect(() => {
-        let array = headStack;
-        let newArray = stacksArray;
-        let rect = array[stackArrayCount];
-        animateView();
-        headTagHandler();
-        if (stackArrayCount < localStacksArray.length) {
-            rect?.to({
-                x: canvasWidth + 200,
-            })
-            setTimeout(() => {
-                array = array.slice(0, stackArrayCount);
-                setHeadStack(array);
-                setLocalStacksArray(newArray);
-                setPopState(false)
-            }, 500);
-        }
-    }, [popState])
-
-    useEffect(() => {
-        let rect = rectRef.current;
-        headTagHandler();
-        if (localStacksArray.length > stackArrayCount) {
-            rect?.to({
-                x: canvasWidth / 3,
-            })
-            setStackArrayCount(prevState => (prevState + 1));
-            setPushState(false)
-        }
-    }, [pushState])
-
 
     useEffect(() => {
         updateCanvasDimension()
@@ -111,6 +47,68 @@ const Kanvas = () => {
         }
     }
 
+    // canvas theme colorr
+    useEffect(() => {
+        if (theme.palette.mode === "dark") {
+            setCanvasTheme("cv-white")
+        } else {
+            setCanvasTheme("cv-black")
+        }
+    }, [theme])
+
+
+    // check for changes in the stack
+    useEffect(() => {
+        let newStackArray = stacksArray;
+        if (stacksArray.length > stackArrayCount) {
+            setLocalStacksArray(newStackArray);
+            animateView();
+            setPushState(true);
+        }else{
+            setStackArrayCount(prevState => (prevState - 1));
+            setPopState(true);
+        }
+
+    }, [stacksArray])
+
+
+    // animate a rect being popped from the stack
+    useEffect(() => {
+        let array = headStack;
+        let newArray = stacksArray;
+        let rect = array.pop();
+        animateView();
+        if (stackArrayCount < localStacksArray.length) {
+            rect?.to({
+                x: canvasWidth + 200,
+            })
+            headTagHandler();
+            setTimeout(() => {
+                setHeadStack(array);
+                setLocalStacksArray(newArray);
+                setPopState(false)
+            }, 700);
+        }
+    }, [popState])
+
+     // animate a rect being pushed to the stack
+    useEffect(() => {
+        let rect = rectRef.current;
+        let array = [...headStack];
+        array.push(rectRef.current);
+        setHeadStack(array)
+        headTagHandler();
+        if (localStacksArray.length > stackArrayCount) {
+            rect?.to({
+                x: canvasWidth / 3,
+            })
+            setStackArrayCount(prevState => (prevState + 1));
+            setPushState(false)
+        }
+    }, [pushState])
+
+
+    // CAMERA POSITION ANIMATOR, MOVE CAMERA UP OR DOWN DENPENDING ON POSITION OF CURRENT HEAD.
     const animateView = () => {
         let newLocalStackArray = localStacksArray;
         let newStackArray = stacksArray;
@@ -141,6 +139,7 @@ const Kanvas = () => {
         }
     }
 
+    // ANIMATE POSITION OF HEAD TEXT 
     const headTagHandler = () => {
         if (localStacksArray.length > 0 && !isNaN(canvasWidth)) {
             let rect = localStacksArray[localStacksArray.length - 1]
