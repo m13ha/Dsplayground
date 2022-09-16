@@ -158,7 +158,7 @@ const Kanvas = () => {
                 y: (rect.posY - 25)
             })
         } else {
-            setHeadTagPosX((canvasWidth / 2) - (35));
+            setHeadTagPosX((canvasWidth / 2) - (30));
             setHeadTagPosY(450 / 2)
         }
     }
@@ -204,7 +204,7 @@ const Kanvas = () => {
                     </Layer>}
                     {(localStacksArray.length === 0) && (!isNaN(canvasWidth)) && <Layer>
                         <Text
-                            x={headTagPosX}
+                            x={(canvasWidth / 2) - (53)}
                             y={headTagPosY}
                             text={"Empty Stack"}
                             fontSize={15}
