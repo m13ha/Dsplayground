@@ -8,7 +8,7 @@ import StacksCompiler from "../Stacks/StacksCompiler"
 const Stacks = () => {
 
   return (
-    <Box>
+    <Box pb={2}>
       <Typography variant="h4" color="primary" mb={2}>
         Stacks
       </Typography>

@@ -29,13 +29,6 @@ code {
     monospace;
 }
 
-
-.canvas-container {
-  max-width: 500px;
-  width: 100%;
-  height: 450px;
-}
-
 .cv-white {
   background-color: transparent;
 }

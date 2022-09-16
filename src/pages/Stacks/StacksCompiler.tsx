@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import Box from "@mui/material/Box";
 import Kanvas from "../Stacks/Kanvas";
 import { StackType } from "../../utils/interfaces";
+import randomColorGenerator from "../../utils/randomColorGenerator";
 
 
 const StacksCompiler = () => {
@@ -14,8 +15,8 @@ const StacksCompiler = () => {
     useEffect(() => {
         let newStacksArray = stacksArray;
         newStacksArray.forEach((object: StackType) => {
-            object.posX = canvasWidth / 3;
-            object.width = canvasWidth / 3;
+            object.posX = (canvasWidth / 2) - 125;
+            object.width = 250;
         });
         setStacksArray(newStacksArray)
     }, [canvasHeight, canvasWidth])
@@ -25,32 +26,37 @@ const StacksCompiler = () => {
         posY: number;
         height: number;
         width: number;
+        color: string;
 
-        constructor(posX: number, posY: number, height: number, width: number) {
+        constructor(posX: number, posY: number, height: number, width: number, color: string) {
             this.posX = posX;
             this.posY = posY;
             this.height = height;
-            this.width = width
+            this.width = width;
+            this.color = color;
         }
     }
 
     const createNewStackObject = () => {
+        let posY, posX, height, width, color;
+
         if (stacksArray.length > 0) {
             let currentHead = stacksArray[stacksArray.length - 1]
-            let posY = currentHead.posY - 35;
-            let posX = currentHead.posX;
-            let height = 30;
-            let width = canvasWidth / 3;
-            let newStackNode = new StackNode(posX, posY, height, width);
-            return newStackNode
+             posY = currentHead.posY - 35;
+             posX = currentHead.posX;
+             height = 30;
+             width = currentHead.width;
+             color = randomColorGenerator();
         } else {
-            let posY = canvasHeight - 35;
-            let posX = canvasWidth / 3;
-            let height = 30;
-            let width = canvasWidth / 3;
-            let newStackNode = new StackNode(posX, posY, height, width);
-            return newStackNode
+             posY = canvasHeight - 35;
+             posX = (canvasWidth / 2) - 125;
+             height = 30;
+             width = 250;
+             color = randomColorGenerator();
         }
+
+        let newStackNode = new StackNode(posX, posY, height, width, color);
+        return newStackNode
     }
 
 
@@ -78,13 +84,13 @@ const StacksCompiler = () => {
     const resetButton = () => {
         setTimeout(() => {
             setButtonActive(false)
-        }, 700);
+        }, 800);
     }
 
     return (
         <React.Fragment>
             <Kanvas></Kanvas>
-            <Box mt={5}
+            <Box mt={2} mb={2}
                 sx={{
                     width: "100%",
                     display: "flex",
@@ -95,8 +101,8 @@ const StacksCompiler = () => {
                 }}>
                 {(!isNaN(canvasWidth)) &&
                     <Stack direction="row" spacing={2}>
-                        <Button variant="contained" color="success" onClick={pushNewHeadToStack}>Push</Button>
-                        <Button variant="contained" color="error" onClick={popHeadOfStack}>Pop</Button>
+                        <Button size="small" variant="outlined"  onClick={pushNewHeadToStack}>Push</Button>
+                        <Button size="small" variant="outlined" onClick={popHeadOfStack}>Pop</Button>
                     </Stack>
                 }
             </Box>

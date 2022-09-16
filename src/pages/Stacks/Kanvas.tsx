@@ -5,6 +5,7 @@ import { CanvasContext } from "../../context/CanvasContext";
 import { Stage, Layer, Rect, Text } from 'react-konva';
 import { StacksArray, StackType } from "../../utils/interfaces";
 import Konva from "konva";
+import "./stacks.css"
 
 
 
@@ -20,7 +21,6 @@ const Kanvas = () => {
     const [headStack, setHeadStack] = useState<any>([])
     const [headTagPosX, setHeadTagPosX] = useState<number>(0)
     const [headTagPosY, setHeadTagPosY] = useState<number>(0)
-    const [headTagText, setHeadTagText] = useState<string>()
     const [canvasTheme, setCanvasTheme] = useState("cv-white");
     const [rectColor, setRectColor]  = useState("black")
     const rectRef = React.useRef<Konva.Rect>(null);
@@ -103,7 +103,7 @@ const Kanvas = () => {
         headTagHandler();
         if (localStacksArray.length > stackArrayCount) {
             rect?.to({
-                x: canvasWidth / 3,
+                x: (canvasWidth / 2) - 125,
             })
             setStackArrayCount(prevState => (prevState + 1));
             setPushState(false)
@@ -112,14 +112,7 @@ const Kanvas = () => {
 
 
     useEffect(() => {
-        if (localStacksArray.length > 0 && !isNaN(canvasWidth)) {
-            let rect = localStacksArray[localStacksArray.length - 1]
-            let text = textRef.current;
-            text?.to({
-                x: (rect.posX + rect.width + 5),
-                y: (rect.posY + (rect.height / 3))
-            })
-        } 
+        headTagHandler();
     }, [textRef.current, headStack])
 
 
@@ -160,13 +153,12 @@ const Kanvas = () => {
         if (localStacksArray.length > 0 && !isNaN(canvasWidth)) {
             let rect = localStacksArray[localStacksArray.length - 1]
             let text = textRef.current;
+            text?.fill(rect.color)
             text?.to({
-                x: (rect.posX + rect.width + 5),
-                y: (rect.posY + (rect.height / 3))
+                y: (rect.posY - 25)
             })
         } else {
-            setHeadTagText("Stack is empty");
-            setHeadTagPosX((canvasWidth / 2) - (140 / 2));
+            setHeadTagPosX((canvasWidth / 2) - (35));
             setHeadTagPosY(450 / 2)
         }
     }
@@ -189,8 +181,8 @@ const Kanvas = () => {
                         <Text
                             x={headTagPosX}
                             y={headTagPosY}
-                            text={"Head/Top"}
-                            fontSize={15}
+                            text={"Head"}
+                            fontSize={20}
                             fontStyle="bold"
                             fill={rectColor}
                             ref={textRef}
@@ -202,8 +194,8 @@ const Kanvas = () => {
                                     y={object.posY}
                                     height={object.height}
                                     width={object.width}
-                                    stroke={rectColor}
-                                    strokeWidth={2}
+                                    fill={object.color}
+                                    strokeWidth={1}
                                     key={index}
                                     ref={rectRef}
                                 />
@@ -214,8 +206,8 @@ const Kanvas = () => {
                         <Text
                             x={headTagPosX}
                             y={headTagPosY}
-                            text={headTagText}
-                            fontSize={20}
+                            text={"Empty Stack"}
+                            fontSize={15}
                             fontStyle="bold"
                             fill={rectColor}
                             ref={textRef}
