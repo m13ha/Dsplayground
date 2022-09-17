@@ -14,17 +14,17 @@ import Queues from "./pages/Queues/Queues";
 import Trees from "./pages/Trees/Trees";
 import Graphs from "./pages/Graphs/Graphs";
 import HashTables from "./pages/Hashtable/Hashtables";
-import { CanvasContext } from "./context/CanvasContext";
+import { StackCanvasContext } from "./context/CanvasContext";
 import { StacksArray } from "./utils/interfaces";
 
 
 
 function App() {
-  const [canvasHeight, setCanvasHeight] = useState<number>()
-  const [canvasWidth, setCanvasWidth] = useState<number>()
+  const [stackCanvasHeight, setStackCanvasHeight] = useState<number>()
+  const [stackCanvasWidth, setStackCanvasWidth] = useState<number>()
   const [stacksArray, setStacksArray] = useState<StacksArray>([])
 
-  const providerValue = useMemo(() => ({ canvasHeight, canvasWidth, setCanvasHeight, setCanvasWidth, stacksArray, setStacksArray }), [canvasHeight, canvasWidth, setCanvasHeight, setCanvasWidth, stacksArray, setStacksArray]);
+  const stackProviderValue = useMemo(() => ({ stackCanvasHeight, stackCanvasWidth, setStackCanvasHeight, setStackCanvasWidth, stacksArray, setStacksArray }), [stackCanvasHeight, stackCanvasWidth, setStackCanvasHeight, setStackCanvasWidth, stacksArray, setStacksArray]);
 
   const [theme, setTheme] = useState<PaletteMode>(() => {
     let dsplayground = localStorage.getItem("dsplaygroundThemeMode");
@@ -71,7 +71,7 @@ function App() {
 
   return (
     <Router>
-      <CanvasContext.Provider value={providerValue}>
+      <StackCanvasContext.Provider value={stackProviderValue}>
         <ThemeProvider theme={currentTheme}>
           <CssBaseline enableColorScheme />
           <div className="App">
@@ -108,7 +108,7 @@ function App() {
             </Container>
           </div>
         </ThemeProvider>
-      </CanvasContext.Provider>
+      </StackCanvasContext.Provider>
     </Router>
   );
 }

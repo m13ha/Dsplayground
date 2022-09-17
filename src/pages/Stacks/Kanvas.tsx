@@ -1,7 +1,7 @@
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import React, { useEffect, useState, useContext, useRef } from "react";
-import { CanvasContext } from "../../context/CanvasContext";
+import { StackCanvasContext } from "../../context/CanvasContext";
 import { Stage, Layer, Rect, Text } from 'react-konva';
 import { StacksArray, StackType } from "../../utils/interfaces";
 import Konva from "konva";
@@ -13,7 +13,7 @@ import "./stacks.css"
 const Kanvas = () => {
     const theme = useTheme();
     const canvasRef = useRef<HTMLDivElement>(null);
-    const { canvasWidth, canvasHeight, setCanvasHeight, setCanvasWidth, stacksArray, setStacksArray } = useContext(CanvasContext);
+    const { stackCanvasWidth, stackCanvasHeight, setStackCanvasHeight, setStackCanvasWidth, stacksArray, setStacksArray } = useContext(StackCanvasContext);
     const [stackArrayCount, setStackArrayCount] = useState<number>(0);
     const [localStacksArray, setLocalStacksArray] = useState<StacksArray>([])
     const [pushState, setPushState] = useState<Boolean>(false);
@@ -33,7 +33,7 @@ const Kanvas = () => {
 
     useEffect(() => {
         headTagHandler();
-    }, [canvasWidth, canvasHeight])
+    }, [stackCanvasWidth, stackCanvasHeight])
 
     useEffect(() => {
         window.addEventListener("resize", updateCanvasDimension)
@@ -42,9 +42,9 @@ const Kanvas = () => {
     const updateCanvasDimension = () => {
         if (canvasRef.current !== null) {
             const newWidth = canvasRef.current.clientWidth;
-            setCanvasWidth(newWidth);
+            setStackCanvasWidth(newWidth);
             const newHeight = canvasRef.current.clientHeight;
-            setCanvasHeight(newHeight);
+            setStackCanvasHeight(newHeight);
         }
     }
 
@@ -84,7 +84,7 @@ const Kanvas = () => {
         animateView();
         if (stackArrayCount < localStacksArray.length) {
             rect?.to({
-                x: canvasWidth + 200,
+                x: stackCanvasWidth + 200,
             })
             setTimeout(() => {
                 setHeadStack(newHeadStack);
@@ -103,7 +103,7 @@ const Kanvas = () => {
         headTagHandler();
         if (localStacksArray.length > stackArrayCount) {
             rect?.to({
-                x: (canvasWidth / 2) - 125,
+                x: (stackCanvasWidth / 2) - 125,
             })
             setStackArrayCount(prevState => (prevState + 1));
             setPushState(false)
@@ -150,7 +150,7 @@ const Kanvas = () => {
 
     // ANIMATE POSITION OF HEAD TEXT 
     const headTagHandler = () => {
-        if (localStacksArray.length > 0 && !isNaN(canvasWidth)) {
+        if (localStacksArray.length > 0 && !isNaN(stackCanvasWidth)) {
             let rect = localStacksArray[localStacksArray.length - 1]
             let text = textRef.current;
             text?.fill(rect.color)
@@ -158,7 +158,7 @@ const Kanvas = () => {
                 y: (rect.posY - 25)
             })
         } else {
-            setHeadTagPosX((canvasWidth / 2) - (30));
+            setHeadTagPosX((stackCanvasWidth / 2) - (30));
             setHeadTagPosY(450 / 2)
         }
     }
@@ -202,9 +202,9 @@ const Kanvas = () => {
                             )
                         })}
                     </Layer>}
-                    {(localStacksArray.length === 0) && (!isNaN(canvasWidth)) && <Layer>
+                    {(localStacksArray.length === 0) && (!isNaN(stackCanvasWidth)) && <Layer>
                         <Text
-                            x={(canvasWidth / 2) - (53)}
+                            x={(stackCanvasWidth / 2) - (53)}
                             y={headTagPosY}
                             text={"Empty Stack"}
                             fontSize={15}

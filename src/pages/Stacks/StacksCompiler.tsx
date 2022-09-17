@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { CanvasContext } from "../../context/CanvasContext";
+import { StackCanvasContext } from "../../context/CanvasContext";
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from "@mui/material/Box";
@@ -9,17 +9,17 @@ import randomColorGenerator from "../../utils/randomColorGenerator";
 
 
 const StacksCompiler = () => {
-    const { canvasHeight, canvasWidth, stacksArray, setStacksArray } = useContext(CanvasContext);
+    const { stackCanvasHeight, stackCanvasWidth, stacksArray, setStacksArray } = useContext(StackCanvasContext);
     const [buttonActive, setButtonActive] = useState(false)
 
     useEffect(() => {
         let newStacksArray = stacksArray;
         newStacksArray.forEach((object: StackType) => {
-            object.posX = (canvasWidth / 2) - 125;
+            object.posX = (stackCanvasWidth / 2) - 125;
             object.width = 250;
         });
         setStacksArray(newStacksArray)
-    }, [canvasHeight, canvasWidth])
+    }, [stackCanvasHeight, stackCanvasWidth])
 
     class StackNode {
         posX: number;
@@ -48,8 +48,8 @@ const StacksCompiler = () => {
              width = currentHead.width;
              color = randomColorGenerator();
         } else {
-             posY = canvasHeight - 35;
-             posX = (canvasWidth / 2) - 125;
+             posY = stackCanvasHeight - 35;
+             posX = (stackCanvasWidth / 2) - 125;
              height = 30;
              width = 250;
              color = randomColorGenerator();
@@ -99,7 +99,7 @@ const StacksCompiler = () => {
                     justifyContent: "center",
                     justifyItems: "center"
                 }}>
-                {(!isNaN(canvasWidth)) &&
+                {(!isNaN(stackCanvasWidth)) &&
                     <Stack direction="row" spacing={2}>
                         <Button size="small" variant="outlined"  onClick={pushNewHeadToStack}>Push</Button>
                         <Button size="small" variant="outlined" onClick={popHeadOfStack}>Pop</Button>

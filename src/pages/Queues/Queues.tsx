@@ -4,10 +4,8 @@ import Typography from '@mui/material/Typography'
 import  Box  from "@mui/material/Box";
 import Link from '@mui/material/Link';
 
-interface Props {
-}
 
-const Queues = (props: Props) => {
+const Queues = () => {
     return (
         <Box>
             <Typography variant="h4" color="primary" mb={2}>
