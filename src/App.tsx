@@ -14,17 +14,29 @@ import Queues from "./pages/Queues/Queues";
 import Trees from "./pages/Trees/Trees";
 import Graphs from "./pages/Graphs/Graphs";
 import HashTables from "./pages/Hashtable/Hashtables";
-import { StackCanvasContext } from "./context/CanvasContext";
-import { StacksArray } from "./utils/interfaces";
+import { StackCanvasContext, QueueCanvasContext } from "./context/CanvasContext";
+import { StacksArray, QueueArray } from "./utils/interfaces";
 
 
 
 function App() {
+  // STACK MANAGEMENT STATES
   const [stackCanvasHeight, setStackCanvasHeight] = useState<number>()
   const [stackCanvasWidth, setStackCanvasWidth] = useState<number>()
   const [stacksArray, setStacksArray] = useState<StacksArray>([])
 
   const stackProviderValue = useMemo(() => ({ stackCanvasHeight, stackCanvasWidth, setStackCanvasHeight, setStackCanvasWidth, stacksArray, setStacksArray }), [stackCanvasHeight, stackCanvasWidth, setStackCanvasHeight, setStackCanvasWidth, stacksArray, setStacksArray]);
+
+
+  // QUEUE MANAGEMENT STATE
+  const [queueCanvasHeight, setQueueCanvasHeight] = useState<number>()
+  const [queueCanvasWidth, setQueueCanvasWidth] = useState<number>()
+  const [queuesArray, setQueuesArray] = useState<QueueArray>([])
+
+  const queueProviderValue = useMemo(() => ({ queueCanvasHeight, queueCanvasWidth, setQueueCanvasHeight, setQueueCanvasWidth, queuesArray, setQueuesArray }), [queueCanvasHeight, queueCanvasWidth, setQueueCanvasHeight, setQueueCanvasWidth, queuesArray, setQueuesArray]);
+
+
+
 
   const [theme, setTheme] = useState<PaletteMode>(() => {
     let dsplayground = localStorage.getItem("dsplaygroundThemeMode");
@@ -71,44 +83,46 @@ function App() {
 
   return (
     <Router>
-      <StackCanvasContext.Provider value={stackProviderValue}>
-        <ThemeProvider theme={currentTheme}>
-          <CssBaseline enableColorScheme />
-          <div className="App">
-            <Container
-              sx={{
-                display: "flex",
-                flexWrap: "nowrap",
-                height: "100%"
-              }}
-              maxWidth={false}
-              disableGutters={true}
-              color="default"
-            >
-              <Navbar changeTheme={changeTheme}></Navbar>
-              <Box
-                component="main"
-                color="default"
+      <QueueCanvasContext.Provider value={queueProviderValue}>
+        <StackCanvasContext.Provider value={stackProviderValue}>
+          <ThemeProvider theme={currentTheme}>
+            <CssBaseline enableColorScheme />
+            <div className="App">
+              <Container
                 sx={{
-                  flexWrap: "wrap",
-                  height: "100%",
-                  p: 3,
+                  display: "flex",
+                  flexWrap: "nowrap",
+                  height: "100%"
                 }}
+                maxWidth={false}
+                disableGutters={true}
+                color="default"
               >
-                <DrawerHeader></DrawerHeader>
-                <Routes>
-                  <Route path="/" element={<Stacks />} />
-                  <Route path="/queues" element={<Queues />} />
-                  <Route path="/linkedlists" element={<LinkedList />} />
-                  <Route path="/trees" element={<Trees />} />
-                  <Route path="/graphs" element={<Graphs />} />
-                  <Route path="/hashtables" element={<HashTables />} />
-                </Routes>
-              </Box>
-            </Container>
-          </div>
-        </ThemeProvider>
-      </StackCanvasContext.Provider>
+                <Navbar changeTheme={changeTheme}></Navbar>
+                <Box
+                  component="main"
+                  color="default"
+                  sx={{
+                    flexWrap: "wrap",
+                    height: "100%",
+                    p: 3,
+                  }}
+                >
+                  <DrawerHeader></DrawerHeader>
+                  <Routes>
+                    <Route path="/" element={<Stacks />} />
+                    <Route path="/queues" element={<Queues />} />
+                    <Route path="/linkedlists" element={<LinkedList />} />
+                    <Route path="/trees" element={<Trees />} />
+                    <Route path="/graphs" element={<Graphs />} />
+                    <Route path="/hashtables" element={<HashTables />} />
+                  </Routes>
+                </Box>
+              </Container>
+            </div>
+          </ThemeProvider>
+        </StackCanvasContext.Provider>
+      </QueueCanvasContext.Provider>
     </Router>
   );
 }

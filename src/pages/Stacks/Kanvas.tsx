@@ -13,7 +13,7 @@ import "./stacks.css"
 const Kanvas = () => {
     const theme = useTheme();
     const canvasRef = useRef<HTMLDivElement>(null);
-    const { stackCanvasWidth, stackCanvasHeight, setStackCanvasHeight, setStackCanvasWidth, stacksArray, setStacksArray } = useContext(StackCanvasContext);
+    const { stackCanvasWidth, setStackCanvasHeight, setStackCanvasWidth, stacksArray, setStacksArray } = useContext(StackCanvasContext);
     const [stackArrayCount, setStackArrayCount] = useState<number>(0);
     const [localStacksArray, setLocalStacksArray] = useState<StacksArray>([])
     const [pushState, setPushState] = useState<Boolean>(false);
@@ -30,10 +30,6 @@ const Kanvas = () => {
     useEffect(() => {
         updateCanvasDimension()
     }, [])
-
-    useEffect(() => {
-        headTagHandler();
-    }, [stackCanvasWidth, stackCanvasHeight])
 
     useEffect(() => {
         window.addEventListener("resize", updateCanvasDimension)
@@ -65,7 +61,6 @@ const Kanvas = () => {
         let newStackArray = stacksArray;
         if (stacksArray.length > stackArrayCount) {
             setLocalStacksArray(newStackArray);
-            animateView();
             setPushState(true);
         } else {
             setStackArrayCount(prevState => (prevState - 1));
@@ -80,8 +75,6 @@ const Kanvas = () => {
         let newHeadStack = headStack
         let newArray = stacksArray;
         let rect = newHeadStack.pop();
-        headTagHandler();
-        animateView();
         if (stackArrayCount < localStacksArray.length) {
             rect?.to({
                 x: stackCanvasWidth + 200,
@@ -92,15 +85,18 @@ const Kanvas = () => {
                 setPopState(false);
             }, 500);
         }
+        animateView();
+        headTagHandler();
     }, [popState])
 
     // animate a rect being pushed to the stack
     useEffect(() => {
         let rect = rectRef.current;
-        let array = [...headStack];
+        let array = headStack;
         array.push(rectRef.current);
         setHeadStack(array)
         headTagHandler();
+        animateView();
         if (localStacksArray.length > stackArrayCount) {
             rect?.to({
                 x: (stackCanvasWidth / 2) - 125,
