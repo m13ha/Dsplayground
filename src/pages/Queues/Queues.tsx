@@ -3,12 +3,12 @@
 import Typography from '@mui/material/Typography'
 import  Box  from "@mui/material/Box";
 import Link from '@mui/material/Link';
-//import QueueCompiler from './QueueCompiler';
+import QueueCompiler from './QueueCompiler';
 
 
 const Queues = () => {
     return (
-        <Box>
+        <Box pb={2}>
             <Typography variant="h4" color="primary" mb={2}>
                 Queues
             </Typography>
@@ -19,7 +19,7 @@ const Queues = () => {
                     queues add (enqueue) their elements to the end of the queue and remove (dequeue) from the top/head.
                 <Link href="" underline="none"> Learn More</Link>
             </Typography>
-            {/* <QueueCompiler></QueueCompiler> */}
+            <QueueCompiler></QueueCompiler>
         </Box>
     );
 };

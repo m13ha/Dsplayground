@@ -1,24 +1,24 @@
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import React, { useEffect, useState, useContext, useRef } from "react";
-import { QueueCanvasContext } from "../../context/CanvasContext";
+import  QueueCanvasContext  from "../../context/QueueContext";
 import { Stage, Layer, Rect, Text } from 'react-konva';
 import { QueueArray, QueueType } from "../../utils/interfaces";
 import Konva from "konva";
-import "./queues.css"
+import "./queue.css"
 
 
 
 
- const Kanvas = () => {
+const Kanvas = () => {
     const theme = useTheme();
     const canvasRef = useRef<HTMLDivElement>(null);
-    const { queueCanvasHeight, queueCanvasWidth, setQueueCanvasHeight, setQueueCanvasWidth, queueArray, setQueueArray } = useContext(QueueCanvasContext);
+    const { queueCanvasHeight, queueCanvasWidth, setQueueCanvasHeight, setQueueCanvasWidth, queueArray } = useContext(QueueCanvasContext);
     const [queueArrayCount, setQueueArrayCount] = useState<number>(0);
     const [localQueueArray, setLocalQueueArray] = useState<QueueArray>([])
     const [enqueueState, setEnqueueState] = useState<Boolean>(false);
-    const [dequeue, setDequeueState] = useState<Boolean>(false);
-    const [headQueue, setHeadQueue] = useState<any>([])
+    const [dequeueState, setDequeueState] = useState<Boolean>(false);
+    const [headQueue, setHeadQueue] = useState<Array<Konva.Rect>>([])
     const [headTagPosX, setHeadTagPosX] = useState<number>(0)
     const [headTagPosY, setHeadTagPosY] = useState<number>(0)
     const [canvasTheme, setCanvasTheme] = useState("cv-white");
@@ -29,11 +29,8 @@ import "./queues.css"
 
     useEffect(() => {
         updateCanvasDimension()
-    }, [])
+    }, [queueCanvasWidth, queueCanvasWidth])
 
-    useEffect(() => {
-       // headTagHandler();
-    }, [queueCanvasWidth, queueCanvasHeight])
 
     useEffect(() => {
         window.addEventListener("resize", updateCanvasDimension)
@@ -59,20 +56,73 @@ import "./queues.css"
     }, [theme])
 
 
-     // check for changes in the stack
-    //  useEffect(() => {
-    //      let newQueueArray = [...queueArray];
-    //      if (queueArray.length > queueArrayCount) {
-    //          setLocalQueueArray(newQueueArray);
-    //          setEnqueueState(true);
-    //      } else {
-    //          setStackArrayCount(prevState => (prevState - 1));
-    //          setPopState(true);
-    //      }
+    useEffect(() => {
+        let newQueueArray = [...queueArray];
+        if (queueArray.length > queueArrayCount) {
+            setLocalQueueArray(newQueueArray)
+            setEnqueueState(true)
+        } else if (queueArrayCount > queueArray.length) {
+            setDequeueState(true)
+        }
+    }, [queueArray])
 
-    //  }, [queueArray])
+    useEffect(() => {
+        if (enqueueState) {
+            setEnqueueState(prevState => !prevState)
+            animateNewBlock()
+        };
+    }, [enqueueState])
+
+    useEffect(() => {
+        if (dequeueState) {
+            setDequeueState(prevState => !prevState)
+            animateOldBlock()
+        };
+    }, [dequeueState])
+
+    const animateNewBlock = () => {
+        let rect = localQueueArray[localQueueArray.length - 1];
+        let array = headQueue;
+        if (rectRef.current !== null) array.push(rectRef.current);
+        setHeadQueue(array);
+        rectRef.current?.to({
+            x: rect.posX
+        })
+        setQueueArrayCount(prevState => (prevState + 1));
+    }
+
+    const animateOldBlock = () => {
+        let newHead = [...headQueue]
+        let rectRef = newHead.shift();
+        let array = [...queueArray]
+        rectRef?.to({
+            x: (queueCanvasWidth + 200)
+        })
+        setTimeout(() => {
+            setQueueArrayCount(prevState => (prevState - 1));
+            setLocalQueueArray(array)
+            setHeadQueue(newHead)
+        }, 500)
+    }
 
 
+    let headTagHandler = (rect?: QueueType) => {
+        if (localQueueArray.length > 0 && !isNaN(queueCanvasWidth)) {
+            let rec = rect ? rect : localQueueArray[0]
+            textRef.current?.fill(rec.color)
+            textRef.current?.to({
+                y: (rec.posY - 25)
+            })
+            console.log(rec)
+        } else {
+            setHeadTagPosX((queueCanvasWidth / 2) - (30));
+            setHeadTagPosY(450 / 2)
+        }
+    }
+
+    useEffect(() => {
+        headTagHandler();
+    }, [headQueue, localQueueArray, queueArray])
 
 
 
@@ -110,7 +160,7 @@ import "./queues.css"
                                     width={object.width}
                                     fill={object.color}
                                     strokeWidth={1}
-                                    key={index}
+                                    key={object.color}
                                     ref={rectRef}
                                 />
                             )
@@ -124,7 +174,6 @@ import "./queues.css"
                             fontSize={15}
                             fontStyle="bold"
                             fill={rectColor}
-                            ref={textRef}
                         />
                     </Layer>}
                 </Stage>
