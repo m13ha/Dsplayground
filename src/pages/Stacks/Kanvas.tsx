@@ -8,8 +8,6 @@ import Konva from "konva";
 import "./stacks.css"
 
 
-
-
 const Kanvas = () => {
     const theme = useTheme();
     const canvasRef = useRef<HTMLDivElement>(null);
@@ -18,7 +16,7 @@ const Kanvas = () => {
     const [localStacksArray, setLocalStacksArray] = useState<StacksArray>([])
     const [pushState, setPushState] = useState<Boolean>(false);
     const [popState, setPopState] = useState<Boolean>(false);
-    const [headStack, setHeadStack] = useState<any>([])
+    const [headStackRef, setHeadStackRef] = useState<any>([])
     const [headTagPosX, setHeadTagPosX] = useState<number>(0)
     const [headTagPosY, setHeadTagPosY] = useState<number>(0)
     const [canvasTheme, setCanvasTheme] = useState("cv-white");
@@ -63,62 +61,64 @@ const Kanvas = () => {
             setLocalStacksArray(newStackArray);
             setPushState(true);
         } else {
-            setStackArrayCount(prevState => (prevState - 1));
             setPopState(true);
+            headTagHandler();
         }
-
     }, [stacksArray])
 
 
     // animate a rect being popped from the stack
     useEffect(() => {
-        let newHeadStack = headStack
-        let newArray = stacksArray;
-        let rect = newHeadStack.pop();
-        if (stackArrayCount < localStacksArray.length) {
-            rect?.to({
-                x: stackCanvasWidth + 200,
-            })
-            setTimeout(() => {
-                setHeadStack(newHeadStack);
-                setLocalStacksArray(newArray)
-                setPopState(false);
-            }, 500);
-        }
-        animateView();
-        headTagHandler();
+        if (popState) popAnimation();
     }, [popState])
 
     // animate a rect being pushed to the stack
     useEffect(() => {
-        let rect = rectRef.current;
-        let array = headStack;
-        array.push(rectRef.current);
-        setHeadStack(array)
-        headTagHandler();
-        animateView();
-        if (localStacksArray.length > stackArrayCount) {
-            rect?.to({
-                x: (stackCanvasWidth / 2) - 125,
-            })
-            setStackArrayCount(prevState => (prevState + 1));
-            setPushState(false)
-        }
+        if(pushState) pushAnimation();
     }, [pushState])
+
+    const pushAnimation = () => {
+        let rect = rectRef.current;
+        let array = headStackRef;
+        if(rect !== null) array.push(rectRef.current);
+        setHeadStackRef(array)
+        rect?.to({
+            x: (stackCanvasWidth / 2) - 125,
+        })
+        setStackArrayCount(prevState => (prevState + 1));
+        setPushState(false)
+        animateView();
+    }
+
+    const popAnimation = () => {
+        let newHeadStackRef = headStackRef
+        let newArray = stacksArray;
+        let rect = newHeadStackRef.pop();
+        animateView();
+        rect?.to({
+            x: stackCanvasWidth + 200,
+        })
+        setTimeout(() => {
+            setStackArrayCount(prevState => (prevState - 1));
+            setHeadStackRef(newHeadStackRef);
+            setLocalStacksArray(newArray)
+            setPopState(false);
+        }, 500);
+    }
 
 
     useEffect(() => {
         headTagHandler();
-    }, [textRef.current, headStack])
+    }, [textRef.current, headStackRef, localStacksArray])
 
 
     // CAMERA POSITION ANIMATOR, MOVE CAMERA UP OR DOWN DENPENDING ON POSITION OF CURRENT HEAD.
     const animateView = () => {
         let newLocalStackArray = localStacksArray;
         let newStackArray = stacksArray;
-        let newHeadStack = headStack;
+        let newHeadStackRef = headStackRef;
         if (stacksArray.length > 1 && stacksArray[stacksArray.length - 1].posY < 45) {
-            newHeadStack.forEach((rect: any) => {
+            newHeadStackRef.forEach((rect: any) => {
                 rect?.to({
                     y: rect.attrs.y + 220,
                 })
@@ -126,11 +126,11 @@ const Kanvas = () => {
             newStackArray.forEach((rect: StackType) => {
                 rect.posY = rect.posY + 220;
             });
-            setHeadStack(newHeadStack);
+            setHeadStackRef(newHeadStackRef);
             setStacksArray(newStackArray);
 
         } else if (localStacksArray.length > 1 && localStacksArray[localStacksArray.length - 1].posY > 409) {
-            newHeadStack.forEach((rect: any) => {
+            newHeadStackRef.forEach((rect: any) => {
                 rect?.to({
                     y: rect.attrs.y - 220,
                 })
@@ -138,7 +138,7 @@ const Kanvas = () => {
             newLocalStackArray.forEach((rect: StackType) => {
                 rect.posY = rect.posY - 220;
             });
-            setHeadStack(newHeadStack);
+            setHeadStackRef(newHeadStackRef);
             setLocalStacksArray(newStackArray);
         }
         headTagHandler();
@@ -192,7 +192,7 @@ const Kanvas = () => {
                                     width={object.width}
                                     fill={object.color}
                                     strokeWidth={1}
-                                    key={index}
+                                    key={object.color}
                                     ref={rectRef}
                                 />
                             )

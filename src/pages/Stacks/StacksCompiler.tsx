@@ -19,7 +19,7 @@ const StacksCompiler = () => {
             object.width = 250;
         });
         setStacksArray(newStacksArray)
-    }, [stackCanvasHeight, stackCanvasWidth])
+    }, [stackCanvasWidth])
 
     class StackNode {
         posX: number;

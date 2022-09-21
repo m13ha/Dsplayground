@@ -14,7 +14,8 @@ import Queues from "./pages/Queues/Queues";
 import Trees from "./pages/Trees/Trees";
 import Graphs from "./pages/Graphs/Graphs";
 import HashTables from "./pages/Hashtable/Hashtables";
-import { StackCanvasContext, QueueCanvasContext } from "./context/CanvasContext";
+import { StackCanvasContext} from "./context/CanvasContext";
+import QueueCanvasContext  from "./context/QueueContext"
 import { StacksArray, QueueArray } from "./utils/interfaces";
 
 
@@ -31,9 +32,9 @@ function App() {
   // QUEUE MANAGEMENT STATE
   const [queueCanvasHeight, setQueueCanvasHeight] = useState<number>()
   const [queueCanvasWidth, setQueueCanvasWidth] = useState<number>()
-  const [queuesArray, setQueuesArray] = useState<QueueArray>([])
+  const [queueArray, setQueueArray] = useState<QueueArray>([])
 
-  const queueProviderValue = useMemo(() => ({ queueCanvasHeight, queueCanvasWidth, setQueueCanvasHeight, setQueueCanvasWidth, queuesArray, setQueuesArray }), [queueCanvasHeight, queueCanvasWidth, setQueueCanvasHeight, setQueueCanvasWidth, queuesArray, setQueuesArray]);
+  const queueProviderValue = useMemo(() => ({ queueCanvasHeight, queueCanvasWidth, setQueueCanvasHeight, setQueueCanvasWidth, queueArray, setQueueArray }), [queueCanvasHeight, queueCanvasWidth, setQueueCanvasHeight, setQueueCanvasWidth, queueArray, setQueueArray]);
 
 
 
