@@ -5,25 +5,20 @@ import  QueueCanvasContext  from "../../context/QueueContext";
 import { Stage, Layer, Rect, Text } from 'react-konva';
 import { QueueArray, QueueType } from "../../utils/interfaces";
 import Konva from "konva";
-import "./queue.css"
-
 
 
 
 const Kanvas = () => {
     const theme = useTheme();
     const canvasRef = useRef<HTMLDivElement>(null);
-    const { queueCanvasWidth, setQueueCanvasHeight, setQueueCanvasWidth, queueArray, setQueueArray } = useContext(QueueCanvasContext);
+    const {queueCanvasHeight, queueCanvasWidth, setQueueCanvasHeight, setQueueCanvasWidth, queueArray, setQueueArray } = useContext(QueueCanvasContext);
     const [localQueueArray, setLocalQueueArray] = useState<QueueArray>([])
     const [enqueueState, setEnqueueState] = useState<Boolean>(false);
     const [dequeueState, setDequeueState] = useState<Boolean>(false);
     const [headQueue, setHeadQueue] = useState<Array<Konva.Rect>>([])
-    const [headTagPosX, setHeadTagPosX] = useState<number>(0)
-    const [headTagPosY, setHeadTagPosY] = useState<number>(0)
     const [canvasTheme, setCanvasTheme] = useState("cv-white");
     const [rectColor, setRectColor] = useState("black")
     const rectRef = React.useRef<Konva.Rect>(null);
-    const headRef = React.useRef<Konva.Text>(null);
 
 
     useEffect(() => {
@@ -84,9 +79,11 @@ const Kanvas = () => {
         let array = headQueue;
         if (rectRef.current !== null) array.push(rectRef.current);
         scrollDownOnEnqueue()
-        rectRef.current?.to({
-            x: rect.posX
-        })
+        setTimeout(() => {
+            rectRef.current?.to({
+                x: rect.posX
+            })
+        }, 400)
         setHeadQueue(array);
     }
 
@@ -95,9 +92,11 @@ const Kanvas = () => {
         let rectRef = newHead.shift();
         let array = [...queueArray]
         scrollUpOnDequeue()
-        rectRef?.to({
-            x: (queueCanvasWidth + 200)
-        })
+        setTimeout(() => {
+            rectRef?.to({
+                x: (queueCanvasWidth + 200)
+            })
+        }, 400)
         setTimeout(() => {
             setLocalQueueArray(array)
             setHeadQueue(newHead)
@@ -188,7 +187,7 @@ const Kanvas = () => {
                             fill={localQueueArray[0].color}
                         />
                         <Text
-                            x={(queueCanvasWidth / 2) - (30)}
+                            x={(queueCanvasWidth / 2) - (22)}
                             y={localQueueArray[localQueueArray.length - 1].posY + 35}
                             text={"Tail"}
                             fontSize={20}
@@ -213,7 +212,7 @@ const Kanvas = () => {
                     {(localQueueArray.length === 0) && (!isNaN(queueCanvasWidth)) && <Layer>
                         <Text
                             x={(queueCanvasWidth / 2) - (53)}
-                            y={headTagPosY}
+                            y={(queueCanvasHeight / 2)}
                             text={"Empty Queue"}
                             fontSize={15}
                             fontStyle="bold"
