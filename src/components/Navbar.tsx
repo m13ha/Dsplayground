@@ -17,11 +17,17 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowsLeftRightToLine, faCircleNodes, faLayerGroup, faNetworkWired, faPeopleArrowsLeftRight, faTableList } from '@fortawesome/free-solid-svg-icons'
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext, useEffect } from "react";
 import {
   Link as RouterLink,
   LinkProps as RouterLinkProps,
+  useLocation,
 } from "react-router-dom";
+
+
+import QueueCanvasContext from "../context/QueueContext";
+import { StackCanvasContext } from "../context/CanvasContext";
+
 
 interface Props {
   changeTheme: () => void;
@@ -40,6 +46,15 @@ interface Props {
 const Navbar = (props: Props) => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const { setStacksArray } = useContext(StackCanvasContext);
+  const { setQueueArray } = useContext(QueueCanvasContext);
+
+  let location = useLocation();
+
+  useEffect(() => {
+    setStacksArray([]);
+    setQueueArray([]);
+  }, [location])
 
   const handleDrawerOpen = () => {
     setOpen(true);

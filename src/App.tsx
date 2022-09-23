@@ -36,9 +36,6 @@ function App() {
 
   const queueProviderValue = useMemo(() => ({ queueCanvasHeight, queueCanvasWidth, setQueueCanvasHeight, setQueueCanvasWidth, queueArray, setQueueArray }), [queueCanvasHeight, queueCanvasWidth, setQueueCanvasHeight, setQueueCanvasWidth, queueArray, setQueueArray]);
 
-
-
-
   const [theme, setTheme] = useState<PaletteMode>(() => {
     let dsplayground = localStorage.getItem("dsplaygroundThemeMode");
 

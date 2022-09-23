@@ -1,4 +1,5 @@
 import { useTheme } from "@mui/material/styles";
+import { useLocation } from "react-router-dom";
 import Box from "@mui/material/Box";
 import React, { useEffect, useState, useContext, useRef } from "react";
 import  QueueCanvasContext  from "../../context/QueueContext";
@@ -19,7 +20,6 @@ const Kanvas = () => {
     const [canvasTheme, setCanvasTheme] = useState("cv-white");
     const [rectColor, setRectColor] = useState("black")
     const rectRef = React.useRef<Konva.Rect>(null);
-
 
     useEffect(() => {
         updateCanvasDimension()
@@ -83,7 +83,7 @@ const Kanvas = () => {
             rectRef.current?.to({
                 x: rect.posX
             })
-        }, 400)
+        }, 250)
         setHeadQueue(array);
     }
 
@@ -94,9 +94,9 @@ const Kanvas = () => {
         scrollUpOnDequeue()
         setTimeout(() => {
             rectRef?.to({
-                x: (queueCanvasWidth + 200)
+                x: (queueCanvasWidth + 300)
             })
-        }, 400)
+        }, 250)
         setTimeout(() => {
             setLocalQueueArray(array)
             setHeadQueue(newHead)
@@ -197,7 +197,7 @@ const Kanvas = () => {
                         {localQueueArray.map((object: QueueType, index: number) => {
                             return (
                                 <Rect
-                                    x={-200}
+                                    x={-300}
                                     y={object.posY}
                                     height={object.height}
                                     width={object.width}

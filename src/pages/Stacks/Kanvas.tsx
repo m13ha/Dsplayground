@@ -21,6 +21,7 @@ const Kanvas = () => {
     const [rectColor, setRectColor]  = useState("black")
     const rectRef = React.useRef<Konva.Rect>(null);
 
+    
 
     useEffect(() => {
         updateCanvasDimension()
