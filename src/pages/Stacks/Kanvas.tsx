@@ -94,16 +94,18 @@ const Kanvas = () => {
         let newHeadStackRef = headStackRef
         let newArray = stacksArray;
         let rect = newHeadStackRef.pop();
-        animateView();
-        rect?.to({
-            x: stackCanvasWidth + 200,
-        })
         setTimeout(() => {
             setStackArrayCount(prevState => (prevState - 1));
             setHeadStackRef(newHeadStackRef);
             setLocalStacksArray(newArray)
             setPopState(false);
         }, 500);
+        rect?.to({
+            x: stackCanvasWidth + 200,
+            onFinish: () => {
+                animateView();
+            }
+        })
     }
 
 

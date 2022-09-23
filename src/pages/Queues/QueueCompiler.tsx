@@ -55,7 +55,7 @@ const QueueCompiler = () => {
             width = currentHead.width;
             color = randomColorGenerator();
         } else {
-            posY = queueCanvasHeight - 35;
+            posY = queueCanvasHeight - 60;
             posX = (queueCanvasWidth / 2) - 125;
             height = 30;
             width = 250;
