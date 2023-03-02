@@ -12,6 +12,7 @@ const StacksCompiler = () => {
     const { stackCanvasHeight, stackCanvasWidth, stacksArray, setStacksArray } = useContext(StackCanvasContext);
     const [buttonActive, setButtonActive] = useState(false)
 
+    // if there is a change in the screen width change the position of all elements in the stack
     useEffect(() => {
         let newStacksArray = stacksArray;
         newStacksArray.forEach((object: StackType) => {
@@ -27,39 +28,45 @@ const StacksCompiler = () => {
         height: number;
         width: number;
         color: string;
+        bColor: string;
 
-        constructor(posX: number, posY: number, height: number, width: number, color: string) {
+        constructor(posX: number, posY: number, height: number, width: number, color: string, bColor: string) {
             this.posX = posX;
             this.posY = posY;
             this.height = height;
             this.width = width;
             this.color = color;
+            this.bColor = bColor;
         }
     }
 
+    // CREATE A NEW STACK USING DATA FROM THE CURRENT HEAD OR CREATE A NEW HEAD
     const createNewStackObject = () => {
-        let posY, posX, height, width, color;
+        let posY, posX, height, width, color, bColor;
 
         if (stacksArray.length > 0) {
             let currentHead = stacksArray[stacksArray.length - 1]
-             posY = currentHead.posY - 35;
+             posY = currentHead.posY - 65;
              posX = currentHead.posX;
-             height = 30;
+             height = 55;
              width = currentHead.width;
              color = randomColorGenerator();
+             bColor = randomColorGenerator();
         } else {
-             posY = stackCanvasHeight - 35;
+             posY = stackCanvasHeight - 65;
              posX = (stackCanvasWidth / 2) - 125;
-             height = 30;
+             height = 55;
              width = 250;
              color = randomColorGenerator();
+             bColor = randomColorGenerator();
         }
 
-        let newStackNode = new StackNode(posX, posY, height, width, color);
+        let newStackNode = new StackNode(posX, posY, height, width, color, bColor);
         return newStackNode
     }
 
 
+    // ADD A NEW ELEMENT TO THE STACK
     const pushNewHeadToStack = () => {
         if (!buttonActive) {
             setButtonActive(true);
@@ -71,6 +78,7 @@ const StacksCompiler = () => {
         }
     }
 
+    // REMOVE AN ELEMENT FROM THE STACK
     const popHeadOfStack = () => {
         if (!buttonActive && stacksArray.length > 0) {
             setButtonActive(true);
@@ -81,10 +89,11 @@ const StacksCompiler = () => {
         }
     }
 
+    // BUTTON DELAY
     const resetButton = () => {
         setTimeout(() => {
             setButtonActive(false)
-        }, 800);
+        }, 1000);
     }
 
     return (

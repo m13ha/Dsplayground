@@ -3,7 +3,8 @@ export interface StackType {
     posY: number,
     height: number,
     width: number,
-    color: string
+    color: string,
+    bColor: string,
 }
 
 export interface QueueType {
@@ -11,7 +12,8 @@ export interface QueueType {
     posY: number,
     height: number,
     width: number,
-    color: string
+    color: string,
+    bColor: string,
 }
 
 export interface StacksArray extends Array<StackType>{}

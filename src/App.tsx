@@ -14,8 +14,7 @@ import Queues from "./pages/Queues/Queues";
 import Trees from "./pages/Trees/Trees";
 import Graphs from "./pages/Graphs/Graphs";
 import HashTables from "./pages/Hashtable/Hashtables";
-import { StackCanvasContext} from "./context/CanvasContext";
-import QueueCanvasContext  from "./context/QueueContext"
+import { StackCanvasContext, QueueCanvasContext } from "./context/CanvasContext";
 import { StacksArray, QueueArray } from "./utils/interfaces";
 
 

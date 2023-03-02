@@ -56,12 +56,13 @@ const Kanvas = () => {
     useEffect(() => {
         let newStackArray = stacksArray;
         if (stacksArray.length > stackArrayCount) {
+            animateView();
             setLocalStacksArray(newStackArray);
             setPushState(true);
         } else {
-            setPopState(true);
-            
+            setPopState(true);   
         }
+        //animateView();
     }, [stacksArray])
 
 
@@ -81,11 +82,11 @@ const Kanvas = () => {
         if(rect !== null) array.push(rectRef.current);
         setHeadStackRef(array)
         rect?.to({
-            x: (stackCanvasWidth / 2) - 125,
+            scaleY: 1,
+            scaleX: 1,
         })
         setStackArrayCount(prevState => (prevState + 1));
         setPushState(false)
-        animateView();
     }
 
     const popAnimation = () => {
@@ -99,7 +100,8 @@ const Kanvas = () => {
             setPopState(false);
         }, 500);
         rect?.to({
-            x: stackCanvasWidth + 200,
+            scaleY: 0,
+            scaleX: 0,
             onFinish: () => {
                 animateView();
             }
@@ -124,7 +126,7 @@ const Kanvas = () => {
             setHeadStackRef(newHeadStackRef);
             setStacksArray(newStackArray);
 
-        } else if (localStacksArray.length > 1 && localStacksArray[localStacksArray.length - 1].posY > 409) {
+        } else if (localStacksArray.length > 1 && localStacksArray[localStacksArray.length - 1].posY > 488) {
             newHeadStackRef.forEach((rect: any) => {
                 rect?.to({
                     y: rect.attrs.y - 220,
@@ -165,14 +167,19 @@ const Kanvas = () => {
                         {localStacksArray.map((object: StackType, index: number) => {
                             return (
                                 <Rect
-                                    x={-200}
+                                    x={object.posX}
                                     y={object.posY}
                                     height={object.height}
                                     width={object.width}
                                     fill={object.color}
-                                    strokeWidth={1}
+                                    stroke={object.bColor}
+                                    strokeWidth={5}
+                                    cornerRadius={50}
                                     key={object.color}
+                                    scaleY={0}
+                                    scaleX={0}
                                     ref={rectRef}
+                                    
                                 />
                             )
                         })}

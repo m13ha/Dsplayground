@@ -25,8 +25,7 @@ import {
 } from "react-router-dom";
 
 
-import QueueCanvasContext from "../context/QueueContext";
-import { StackCanvasContext } from "../context/CanvasContext";
+import { StackCanvasContext, QueueCanvasContext } from "../context/CanvasContext";
 
 
 interface Props {

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import  QueueCanvasContext  from "../../context/QueueContext";
+import  { QueueCanvasContext } from "../../context/CanvasContext";
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from "@mui/material/Box";

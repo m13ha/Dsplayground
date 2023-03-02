@@ -1,8 +1,7 @@
 import { useTheme } from "@mui/material/styles";
-import { useLocation } from "react-router-dom";
 import Box from "@mui/material/Box";
 import React, { useEffect, useState, useContext, useRef } from "react";
-import  QueueCanvasContext  from "../../context/QueueContext";
+import { QueueCanvasContext } from "../../context/CanvasContext";
 import { Stage, Layer, Rect, Text } from 'react-konva';
 import { QueueArray, QueueType } from "../../utils/interfaces";
 import Konva from "konva";
