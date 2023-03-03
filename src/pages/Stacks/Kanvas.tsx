@@ -6,6 +6,9 @@ import { Stage, Layer, Rect, Text } from 'react-konva';
 import { StacksArray, StackType } from "../../utils/interfaces";
 import Konva from "konva";
 import "./stacks.css"
+import  pop  from "../../assets/audio/pop.mp3";
+import  push from "../../assets/audio/push.mp3";
+import useSound from "use-sound";
 
 
 const Kanvas = () => {
@@ -20,6 +23,8 @@ const Kanvas = () => {
     const [canvasTheme, setCanvasTheme] = useState("cv-white");
     const [rectColor, setRectColor]  = useState("black")
     const rectRef = React.useRef<Konva.Rect>(null);
+    const [playPop] = useSound(pop);
+    const [playPush] = useSound(push);
 
     
 
@@ -81,6 +86,7 @@ const Kanvas = () => {
         let array = headStackRef;
         if(rect !== null) array.push(rectRef.current);
         setHeadStackRef(array)
+        playPush()
         rect?.to({
             scaleY: 1,
             scaleX: 1,
@@ -99,6 +105,7 @@ const Kanvas = () => {
             setLocalStacksArray(newArray)
             setPopState(false);
         }, 500);
+        playPop();
         rect?.to({
             scaleY: 0,
             scaleX: 0,
