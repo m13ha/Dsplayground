@@ -28,40 +28,36 @@ const StacksCompiler = () => {
         height: number;
         width: number;
         color: string;
-        bColor: string;
 
-        constructor(posX: number, posY: number, height: number, width: number, color: string, bColor: string) {
+        constructor(posX: number, posY: number, height: number, width: number, color: string) {
             this.posX = posX;
             this.posY = posY;
             this.height = height;
             this.width = width;
             this.color = color;
-            this.bColor = bColor;
         }
     }
 
     // CREATE A NEW STACK USING DATA FROM THE CURRENT HEAD OR CREATE A NEW HEAD
     const createNewStackObject = () => {
-        let posY, posX, height, width, color, bColor;
+        let posY, posX, height, width, color;
 
         if (stacksArray.length > 0) {
             let currentHead = stacksArray[stacksArray.length - 1]
              posY = currentHead.posY - 65;
              posX = currentHead.posX;
-             height = 55;
+             height = 60;
              width = currentHead.width;
              color = randomColorGenerator();
-             bColor = randomColorGenerator();
         } else {
              posY = stackCanvasHeight - 65;
              posX = (stackCanvasWidth / 2) - 125;
-             height = 55;
+             height = 60;
              width = 250;
              color = randomColorGenerator();
-             bColor = randomColorGenerator();
         }
 
-        let newStackNode = new StackNode(posX, posY, height, width, color, bColor);
+        let newStackNode = new StackNode(posX, posY, height, width, color);
         return newStackNode
     }
 

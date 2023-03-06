@@ -124,11 +124,11 @@ const Kanvas = () => {
         if (stacksArray.length > 1 && stacksArray[stacksArray.length - 1].posY < 45) {
             newHeadStackRef.forEach((rect: any) => {
                 rect?.to({
-                    y: rect.attrs.y + 220,
+                    y: rect.attrs.y + 300,
                 })
             });
             newStackArray.forEach((rect: StackType) => {
-                rect.posY = rect.posY + 220;
+                rect.posY = rect.posY + 300;
             });
             setHeadStackRef(newHeadStackRef);
             setStacksArray(newStackArray);
@@ -136,11 +136,11 @@ const Kanvas = () => {
         } else if (localStacksArray.length > 1 && localStacksArray[localStacksArray.length - 1].posY > 488) {
             newHeadStackRef.forEach((rect: any) => {
                 rect?.to({
-                    y: rect.attrs.y - 220,
+                    y: rect.attrs.y - 300,
                 })
             });
             newLocalStackArray.forEach((rect: StackType) => {
-                rect.posY = rect.posY - 220;
+                rect.posY = rect.posY - 300;
             });
             setHeadStackRef(newHeadStackRef);
             setLocalStacksArray(newStackArray);
@@ -179,8 +179,6 @@ const Kanvas = () => {
                                     height={object.height}
                                     width={object.width}
                                     fill={object.color}
-                                    stroke={object.bColor}
-                                    strokeWidth={5}
                                     cornerRadius={50}
                                     key={object.color}
                                     scaleY={0}
