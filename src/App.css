@@ -4,3 +4,10 @@
   display: flex;
   flex-wrap: wrap;
 }
+
+.canvas-container {
+  min-width: 320px;
+  width: 100%;
+  height: 500px;
+  max-width: 800px;
+}
