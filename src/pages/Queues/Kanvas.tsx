@@ -5,13 +5,16 @@ import { QueueCanvasContext } from "../../context/CanvasContext";
 import { Stage, Layer, Rect, Text } from 'react-konva';
 import { QueueArray, QueueType } from "../../utils/interfaces";
 import Konva from "konva";
+import pop from "../../assets/audio/pop.mp3";
+import push from "../../assets/audio/push.mp3";
+import useSound from "use-sound";
 
 
 
 const Kanvas = () => {
     const theme = useTheme();
     const canvasRef = useRef<HTMLDivElement>(null);
-    const {queueCanvasHeight, queueCanvasWidth, setQueueCanvasHeight, setQueueCanvasWidth, queueArray, setQueueArray } = useContext(QueueCanvasContext);
+    const { queueCanvasHeight, queueCanvasWidth, setQueueCanvasHeight, setQueueCanvasWidth, queueArray, setQueueArray } = useContext(QueueCanvasContext);
     const [localQueueArray, setLocalQueueArray] = useState<QueueArray>([])
     const [enqueueState, setEnqueueState] = useState<Boolean>(false);
     const [dequeueState, setDequeueState] = useState<Boolean>(false);
@@ -19,6 +22,9 @@ const Kanvas = () => {
     const [canvasTheme, setCanvasTheme] = useState("cv-white");
     const [rectColor, setRectColor] = useState("black")
     const rectRef = React.useRef<Konva.Rect>(null);
+    const [playPop] = useSound(pop);
+    const [playPush] = useSound(push);
+
 
     useEffect(() => {
         updateCanvasDimension()
@@ -62,100 +68,111 @@ const Kanvas = () => {
     useEffect(() => {
         if (enqueueState) {
             setEnqueueState(prevState => !prevState)
-            animateNewBlock()
+            enqueueAnimation()
         };
+        //console.log(queueArray[0], queueArray[queueArray.length - 1])
     }, [enqueueState])
 
     useEffect(() => {
         if (dequeueState) {
             setDequeueState(prevState => !prevState)
-            animateOldBlock()
+            dequeueAnimation()
         };
     }, [dequeueState])
 
-    const animateNewBlock = () => {
-        let rect = localQueueArray[localQueueArray.length - 1];
+    const enqueueAnimation = () => {
         let array = headQueue;
         if (rectRef.current !== null) array.push(rectRef.current);
-        scrollDownOnEnqueue()
+        scrollRightOnEnqueue()
+        playPush()
         setTimeout(() => {
             rectRef.current?.to({
-                x: rect.posX
+                scaleX: 1
             })
-        }, 250)
+        }, 200)
+        scrollRightOnEnqueue()
         setHeadQueue(array);
     }
 
-    const animateOldBlock = () => {
+    const dequeueAnimation = () => {
+        setTimeout(() => {
+            rectRef?.to({
+                scaleX: 0
+            })
+        }, 200)
+        playPop()
         let newHead = [...headQueue]
         let rectRef = newHead.shift();
         let array = [...queueArray]
-        scrollUpOnDequeue()
-        setTimeout(() => {
-            rectRef?.to({
-                x: (queueCanvasWidth + 300)
-            })
-        }, 250)
+        scrollLeftOnDequeue()
         setTimeout(() => {
             setLocalQueueArray(array)
             setHeadQueue(newHead)
         }, 500)
     }
 
-    const scrollUpOnDequeue = () => {
+    const scrollLeftOnDequeue = () => {
         let newArray = queueArray;
-        let newHeadQueue = headQueue;
-        if (queueArray.length > 1 && queueArray[0].posY < 0) {
-            newHeadQueue.forEach((rect: any) => {
+        let newHeadQueueRectRef = headQueue;
+        if (queueArray.length > 1 && queueArray[0].posX < 0) {
+            let count = newArray[0].posX - newArray[newArray.length - 1].posX
+
+            newHeadQueueRectRef.forEach((rect: any) => {
                 rect?.to({
-                    y: rect.attrs.y + 400,
+                    x: rect.attrs.x - count,
                 })
             });
             newArray.forEach((rect: QueueType) => {
-                rect.posY = rect.posY + 400;
+                rect.posX = rect.posX - count;
             });
-            setHeadQueue(newHeadQueue);
+            setHeadQueue(newHeadQueueRectRef);
             setQueueArray(newArray);
 
-        } else if (queueArray.length > 1 && queueArray[0].posY > 409) {
-            newHeadQueue.forEach((rect: any) => {
+
+        } else if (queueArray.length > 1 && queueArray[0].posX > queueCanvasWidth - 45) {
+            newHeadQueueRectRef.forEach((rect: any) => {
                 rect?.to({
-                    y: rect.attrs.y - 400,
+                    x: rect.attrs.x - queueCanvasWidth/2,
                 })
             });
             newArray.forEach((rect: QueueType) => {
-                rect.posY = rect.posY - 400;
+                rect.posX = rect.posX - queueCanvasWidth/2;
             });
-            setHeadQueue(newHeadQueue);
+            setHeadQueue(newHeadQueueRectRef);
             setQueueArray(newArray);
+
         }
     }
 
-    const scrollDownOnEnqueue = () => {
+    const scrollRightOnEnqueue = () => {
         let newArray = queueArray;
-        let newHeadQueue = headQueue;
-        if (queueArray.length > 1 && queueArray[queueArray.length - 1].posY > 450) {
-            newHeadQueue.forEach((rect: any) => {
+        let newHeadQueueRectRef = headQueue;
+        if (queueArray.length > 1 && queueArray[queueArray.length - 1].posX > queueCanvasWidth - 45) {
+            newHeadQueueRectRef.forEach((rect: any) => {
                 rect?.to({
-                    y: rect.attrs.y - 400,
+                    x: rect.attrs.x - queueCanvasWidth/2,
                 })
             });
             newArray.forEach((rect: QueueType) => {
-                rect.posY = rect.posY - 400;
+                rect.posX = rect.posX - queueCanvasWidth/2;
             });
-            setHeadQueue(newHeadQueue);
+            setHeadQueue(newHeadQueueRectRef);
             setQueueArray(newArray);
-        } else if (queueArray.length > 1 && queueArray[queueArray.length - 1].posY < 0) {
-            newHeadQueue.forEach((rect: any) => {
+
+        } else if (queueArray.length > 1 && queueArray[queueArray.length - 1].posX < 45) {
+            let count = newArray[0].posX - newArray[newArray.length - 1].posX
+
+            newHeadQueueRectRef.forEach((rect: any) => {
                 rect?.to({
-                    y: rect.attrs.y + 400,
+                    x: rect.attrs.x - count,
                 })
             });
             newArray.forEach((rect: QueueType) => {
-                rect.posY = rect.posY + 400;
+                rect.posX = rect.posX - count;
             });
-            setHeadQueue(newHeadQueue);
+            setHeadQueue(newHeadQueueRectRef);
             setQueueArray(newArray);
+
         }
     }
 
@@ -178,31 +195,34 @@ const Kanvas = () => {
                 <Stage width={canvasRef.current?.clientWidth} height={canvasRef.current?.clientHeight}>
                     {(localQueueArray.length > 0) && <Layer>
                         <Text
-                            x={(queueCanvasWidth / 2) - (30)}
-                            y={localQueueArray[0].posY - 25}
+                            x={localQueueArray[0].posX}
+                            y={localQueueArray[0].posY - 35}
                             text={"Head"}
                             fontSize={20}
                             fontStyle="bold"
                             fill={localQueueArray[0].color}
                         />
-                        <Text
-                            x={(queueCanvasWidth / 2) - (22)}
-                            y={localQueueArray[localQueueArray.length - 1].posY + 35}
-                            text={"Tail"}
-                            fontSize={20}
-                            fontStyle="bold"
-                            fill={localQueueArray[localQueueArray.length - 1].color}
-                        />
+                        {(localQueueArray.length > 1) &&
+                            <Text
+                                y={localQueueArray[localQueueArray.length - 1].posY - 35}
+                                x={localQueueArray[localQueueArray.length - 1].posX}
+                                text={"Tail"}
+                                fontSize={20}
+                                fontStyle="bold"
+                                fill={localQueueArray[localQueueArray.length - 1].color}
+                            />}
                         {localQueueArray.map((object: QueueType, index: number) => {
                             return (
                                 <Rect
-                                    x={-300}
+                                    x={object.posX}
                                     y={object.posY}
+                                    scaleX={0}
                                     height={object.height}
                                     width={object.width}
                                     fill={object.color}
                                     strokeWidth={1}
                                     key={object.color}
+                                    cornerRadius={50}
                                     ref={rectRef}
                                 />
                             )

@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from "@mui/material/Box";
 import Kanvas from "../Queues/Kanvas";
-import { QueueType, QueueArray } from "../../utils/interfaces";
+import { QueueType } from "../../utils/interfaces";
 import randomColorGenerator from "../../utils/randomColorGenerator";
 
 
@@ -44,21 +44,21 @@ const QueueCompiler = () => {
         let newQueueArray = [...queueArray];
 
         newQueueArray.forEach((object: QueueType) => {
-            object.posY = object.posY - 35;
+            object.posX = object.posX - 65;
         });
 
         if (queueArray.length > 0) {
             let currentHead = newQueueArray[newQueueArray.length - 1]
-            posY = currentHead.posY + 35;
-            posX = currentHead.posX;
-            height = 30;
+            posY = currentHead.posY;
+            posX = currentHead.posX + 65;
+            height = 250;
             width = currentHead.width;
             color = randomColorGenerator();
         } else {
-            posY = queueCanvasHeight - 60;
-            posX = (queueCanvasWidth / 2) - 125;
-            height = 30;
-            width = 250;
+            posX = queueCanvasWidth - 65;
+            posY = (queueCanvasHeight / 2) - 125;
+            height = 250;
+            width = 60;
             color = randomColorGenerator();
         }
 

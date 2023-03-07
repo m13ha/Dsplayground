@@ -5,7 +5,6 @@ import { StackCanvasContext } from "../../context/CanvasContext";
 import { Stage, Layer, Rect, Text } from 'react-konva';
 import { StacksArray, StackType } from "../../utils/interfaces";
 import Konva from "konva";
-import "./stacks.css"
 import  pop  from "../../assets/audio/pop.mp3";
 import  push from "../../assets/audio/push.mp3";
 import useSound from "use-sound";
@@ -133,7 +132,7 @@ const Kanvas = () => {
             setHeadStackRef(newHeadStackRef);
             setStacksArray(newStackArray);
 
-        } else if (localStacksArray.length > 1 && localStacksArray[localStacksArray.length - 1].posY > 488) {
+        } else if (localStacksArray.length > 1 && localStacksArray[localStacksArray.length - 1].posY > 450) {
             newHeadStackRef.forEach((rect: any) => {
                 rect?.to({
                     y: rect.attrs.y - 300,
