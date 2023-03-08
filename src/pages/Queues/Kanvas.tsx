@@ -148,27 +148,26 @@ const Kanvas = () => {
         let newArray = queueArray;
         let newHeadQueueRectRef = headQueue;
         if (queueArray.length > 1 && queueArray[queueArray.length - 1].posX > queueCanvasWidth - 45) {
+            let count = queueCanvasWidth - newArray[0].posX - newArray[newArray.length - 1].posX;
             newHeadQueueRectRef.forEach((rect: any) => {
                 rect?.to({
-                    x: rect.attrs.x - queueCanvasWidth/2,
+                    x: rect.attrs.x + count,
                 })
             });
             newArray.forEach((rect: QueueType) => {
-                rect.posX = rect.posX - queueCanvasWidth/2;
+                rect.posX = rect.posX + count;
             });
             setHeadQueue(newHeadQueueRectRef);
             setQueueArray(newArray);
 
         } else if (queueArray.length > 1 && queueArray[queueArray.length - 1].posX < 45) {
-            let count = newArray[0].posX - newArray[newArray.length - 1].posX
-
             newHeadQueueRectRef.forEach((rect: any) => {
                 rect?.to({
-                    x: rect.attrs.x - count,
+                    x: rect.attrs.x + 220,
                 })
             });
             newArray.forEach((rect: QueueType) => {
-                rect.posX = rect.posX - count;
+                rect.posX = rect.posX + 220;
             });
             setHeadQueue(newHeadQueueRectRef);
             setQueueArray(newArray);
