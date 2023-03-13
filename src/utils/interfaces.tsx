@@ -4,6 +4,7 @@ export interface StackType {
     height: number,
     width: number,
     color: string,
+    value: string
 }
 
 export interface QueueType {

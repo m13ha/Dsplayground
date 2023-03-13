@@ -5,27 +5,29 @@ import { StackCanvasContext } from "../../context/CanvasContext";
 import { Stage, Layer, Rect, Text } from 'react-konva';
 import { StacksArray, StackType } from "../../utils/interfaces";
 import Konva from "konva";
-import  pop  from "../../assets/audio/pop.mp3";
-import  push from "../../assets/audio/push.mp3";
+import pop from "../../assets/audio/pop.mp3";
+import push from "../../assets/audio/push.mp3";
 import useSound from "use-sound";
 
 
 const Kanvas = () => {
     const theme = useTheme();
     const canvasRef = useRef<HTMLDivElement>(null);
-    const {stackCanvasHeight, stackCanvasWidth, setStackCanvasHeight, setStackCanvasWidth, stacksArray, setStacksArray } = useContext(StackCanvasContext);
+    const { stackCanvasHeight, stackCanvasWidth, setStackCanvasHeight, setStackCanvasWidth, stacksArray, setStacksArray } = useContext(StackCanvasContext);
     const [stackArrayCount, setStackArrayCount] = useState<number>(0);
     const [localStacksArray, setLocalStacksArray] = useState<StacksArray>([])
     const [pushState, setPushState] = useState<Boolean>(false);
     const [popState, setPopState] = useState<Boolean>(false);
     const [headStackRef, setHeadStackRef] = useState<any>([])
+    const [stackTextRef, setStackTextRef] = useState<any>([])
     const [canvasTheme, setCanvasTheme] = useState("cv-white");
-    const [rectColor, setRectColor]  = useState("black")
+    const [rectColor, setRectColor] = useState("black")
     const rectRef = React.useRef<Konva.Rect>(null);
+    const textRef = React.useRef<Konva.Text>(null);
     const [playPop] = useSound(pop);
     const [playPush] = useSound(push);
 
-    
+
 
     useEffect(() => {
         updateCanvasDimension()
@@ -64,7 +66,7 @@ const Kanvas = () => {
             setLocalStacksArray(newStackArray);
             setPushState(true);
         } else {
-            setPopState(true);   
+            setPopState(true);
         }
         //animateView();
     }, [stacksArray])
@@ -77,13 +79,13 @@ const Kanvas = () => {
 
     // animate a rect being pushed to the stack
     useEffect(() => {
-        if(pushState) pushAnimation();
+        if (pushState) pushAnimation();
     }, [pushState])
 
     const pushAnimation = () => {
         let rect = rectRef.current;
         let array = headStackRef;
-        if(rect !== null) array.push(rectRef.current);
+        if (rect !== null) array.push(rectRef.current);
         setHeadStackRef(array)
         playPush()
         rect?.to({
@@ -132,7 +134,8 @@ const Kanvas = () => {
             setHeadStackRef(newHeadStackRef);
             setStacksArray(newStackArray);
 
-        } else if (localStacksArray.length > 1 && localStacksArray[localStacksArray.length - 1].posY > 450) {
+        }
+        if (localStacksArray.length > 1 && localStacksArray[localStacksArray.length - 1].posY > 495) {
             newHeadStackRef.forEach((rect: any) => {
                 rect?.to({
                     y: rect.attrs.y - 300,
@@ -144,7 +147,7 @@ const Kanvas = () => {
             setHeadStackRef(newHeadStackRef);
             setLocalStacksArray(newStackArray);
         }
-        
+
     }
 
     return (
@@ -172,19 +175,30 @@ const Kanvas = () => {
                         />
                         {localStacksArray.map((object: StackType, index: number) => {
                             return (
-                                <Rect
-                                    x={object.posX}
-                                    y={object.posY}
-                                    height={object.height}
-                                    width={object.width}
-                                    fill={object.color}
-                                    cornerRadius={50}
-                                    key={object.color}
-                                    scaleY={0}
-                                    scaleX={0}
-                                    ref={rectRef}
-                                    
-                                />
+                                <React.Fragment>
+                                    <Rect
+                                        x={object.posX}
+                                        y={object.posY}
+                                        height={object.height}
+                                        width={object.width}
+                                        fill={object.color}
+                                        cornerRadius={50}
+                                        key={object.color}
+                                        scaleY={0}
+                                        scaleX={0}
+                                        ref={rectRef}
+
+                                    />
+                                    <Text
+                                        x={object.posX + 82}
+                                        y={object.posY + 20}
+                                        text={object.value}
+                                        fontSize={20}
+                                        fontStyle="bold"
+                                        fill={rectColor}
+                                        ref={textRef}
+                                    />
+                                </React.Fragment>
                             )
                         })}
                     </Layer>}
