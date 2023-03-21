@@ -19,9 +19,11 @@ const Kanvas = () => {
     const [enqueueState, setEnqueueState] = useState<Boolean>(false);
     const [dequeueState, setDequeueState] = useState<Boolean>(false);
     const [headQueue, setHeadQueue] = useState<Array<Konva.Rect>>([])
+    const [queueTextRef, setQueueTextRef] = useState<any>([])
     const [canvasTheme, setCanvasTheme] = useState("cv-white");
     const [rectColor, setRectColor] = useState("black")
     const rectRef = React.useRef<Konva.Rect>(null);
+    const textRef = React.useRef<Konva.Text>(null);
     const [playPop] = useSound(pop);
     const [playPush] = useSound(push);
 
@@ -81,33 +83,49 @@ const Kanvas = () => {
     }, [dequeueState])
 
     const enqueueAnimation = () => {
-        let array = headQueue;
-        if (rectRef.current !== null) array.push(rectRef.current);
+        let headRefArray = headQueue;
+        let textRefArray = queueTextRef
+        if (rectRef.current !== null) headRefArray.push(rectRef.current);
+        if (textRef.current !== null) textRefArray.push(textRef.current);
         scrollRightOnEnqueue()
         playPush()
         setTimeout(() => {
             rectRef.current?.to({
-                scaleX: 1
+                scaleX: 1,
+                scaleY: 1
+            })
+            textRef.current?.to({
+                scaleX: 1,
+                scaleY: 1
             })
         }, 200)
         scrollRightOnEnqueue()
-        setHeadQueue(array);
+        setHeadQueue(headRefArray);
+        setQueueTextRef(textRefArray)
     }
 
     const dequeueAnimation = () => {
+        playPop()
+        let newHead = [...headQueue];
+        let textRefArr = [...queueTextRef]
+        let rectRef = newHead.shift();
+        let textRef = textRefArr.shift()
+        let array = [...queueArray]
         setTimeout(() => {
             rectRef?.to({
-                scaleX: 0
+                scaleX: 0,
+                scaleY: 0,
             })
-        }, 200)
-        playPop()
-        let newHead = [...headQueue]
-        let rectRef = newHead.shift();
-        let array = [...queueArray]
+            textRef?.to({
+                scaleX: 0,
+                scaleY: 0,
+            })
+        }, 300)
         scrollLeftOnDequeue()
         setTimeout(() => {
             setLocalQueueArray(array)
             setHeadQueue(newHead)
+            setQueueTextRef(textRefArr)
         }, 500)
     }
 
@@ -212,18 +230,32 @@ const Kanvas = () => {
                             />}
                         {localQueueArray.map((object: QueueType, index: number) => {
                             return (
-                                <Rect
-                                    x={object.posX}
-                                    y={object.posY}
-                                    scaleX={0}
-                                    height={object.height}
-                                    width={object.width}
-                                    fill={object.color}
-                                    strokeWidth={1}
-                                    key={object.color}
-                                    cornerRadius={50}
-                                    ref={rectRef}
-                                />
+                                <React.Fragment key={object.color}>
+                                    <Rect
+                                        x={object.posX}
+                                        y={object.posY}
+                                        height={object.height}
+                                        width={object.width}
+                                        fill={object.color}
+                                        cornerRadius={50}
+                                        scaleY={0}
+                                        scaleX={0}
+                                        ref={rectRef}
+
+                                    />
+                                    <Text
+                                        x={object.posX + 35}
+                                        y={object.posY + 80}
+                                        text={object.value}
+                                        fontSize={20}
+                                        fontStyle="bold"
+                                        fill={rectColor}
+                                        ref={textRef}
+                                        scaleY={0}
+                                        scaleX={0}
+                                        rotationDeg={90}
+                                    />
+                                </React.Fragment>
                             )
                         })}
                     </Layer>}

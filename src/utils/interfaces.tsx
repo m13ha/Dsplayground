@@ -13,6 +13,7 @@ export interface QueueType {
     height: number,
     width: number,
     color: string,
+    value: string
 }
 
 export interface StacksArray extends Array<StackType>{}

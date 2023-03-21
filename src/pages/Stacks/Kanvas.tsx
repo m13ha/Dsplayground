@@ -84,11 +84,19 @@ const Kanvas = () => {
 
     const pushAnimation = () => {
         let rect = rectRef.current;
-        let array = headStackRef;
-        if (rect !== null) array.push(rectRef.current);
-        setHeadStackRef(array)
+        let text = textRef.current
+        let rectRefArray = headStackRef;
+        let textRefArray = stackTextRef;
+        if (rect !== null) rectRefArray.push(rectRef.current);
+        if (rect !== null) textRefArray.push(textRef.current);
+        setHeadStackRef(rectRefArray);
+        setStackTextRef(textRefArray)
         playPush()
         rect?.to({
+            scaleY: 1,
+            scaleX: 1,
+        });
+        text?.to({
             scaleY: 1,
             scaleX: 1,
         })
@@ -97,9 +105,11 @@ const Kanvas = () => {
     }
 
     const popAnimation = () => {
-        let newHeadStackRef = headStackRef
+        let newHeadStackRef = headStackRef;
+        let textRefArray = stackTextRef;
         let newArray = stacksArray;
         let rect = newHeadStackRef.pop();
+        let text = textRefArray.pop()
         setTimeout(() => {
             setStackArrayCount(prevState => (prevState - 1));
             setHeadStackRef(newHeadStackRef);
@@ -110,10 +120,12 @@ const Kanvas = () => {
         rect?.to({
             scaleY: 0,
             scaleX: 0,
-            onFinish: () => {
-                animateView();
-            }
         })
+        text?.to({
+            scaleY: 0,
+            scaleX: 0,
+        })
+        animateView()
     }
 
 
@@ -134,8 +146,7 @@ const Kanvas = () => {
             setHeadStackRef(newHeadStackRef);
             setStacksArray(newStackArray);
 
-        }
-        if (localStacksArray.length > 1 && localStacksArray[localStacksArray.length - 1].posY > 495) {
+        }else if (localStacksArray.length > 1 && localStacksArray[localStacksArray.length - 1].posY > 400) {
             newHeadStackRef.forEach((rect: any) => {
                 rect?.to({
                     y: rect.attrs.y - 300,
@@ -175,15 +186,14 @@ const Kanvas = () => {
                         />
                         {localStacksArray.map((object: StackType, index: number) => {
                             return (
-                                <React.Fragment>
+                                <React.Fragment key={object.color}>
                                     <Rect
                                         x={object.posX}
                                         y={object.posY}
                                         height={object.height}
                                         width={object.width}
                                         fill={object.color}
-                                        cornerRadius={50}
-                                        key={object.color}
+                                        cornerRadius={50} 
                                         scaleY={0}
                                         scaleX={0}
                                         ref={rectRef}
@@ -197,6 +207,8 @@ const Kanvas = () => {
                                         fontStyle="bold"
                                         fill={rectColor}
                                         ref={textRef}
+                                        scaleY={0}
+                                        scaleX={0}
                                     />
                                 </React.Fragment>
                             )

@@ -28,18 +28,21 @@ const QueueCompiler = () => {
         height: number;
         width: number;
         color: string;
+        value: string;
 
-        constructor(posX: number, posY: number, height: number, width: number, color: string) {
+        constructor(posX: number, posY: number, height: number, width: number, color: string, value: string) {
             this.posX = posX;
             this.posY = posY;
             this.height = height;
             this.width = width;
             this.color = color;
+            this.value = value;
+
         }
     }
 
     const createNewQueueObject = () => {
-        let posY, posX, height, width, color;
+        let posY, posX, height, width, color, value;
 
         let newQueueArray = [...queueArray];
 
@@ -54,15 +57,17 @@ const QueueCompiler = () => {
             height = 250;
             width = currentHead.width;
             color = randomColorGenerator();
+            value = color;
         } else {
             posX = queueCanvasWidth - 65;
             posY = (queueCanvasHeight / 2) - 125;
             height = 250;
             width = 60;
             color = randomColorGenerator();
+            value = color;
         }
 
-        let newQueueNode = new QueueNode(posX, posY, height, width, color);
+        let newQueueNode = new QueueNode(posX, posY, height, width, color, value);
         return newQueueNode
     }
 
